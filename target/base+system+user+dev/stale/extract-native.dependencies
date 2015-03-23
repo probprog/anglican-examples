@@ -1,1 +1,0 @@
-([:dependencies ([gorilla-repl/gorilla-repl "0.3.4"] [cider/cider-nrepl "0.8.1"] [org.clojure/clojure "1.6.0"] [embang/embang "0.6.1"] [org.clojure/tools.nrepl "0.2.6" :exclusions ([org.clojure/clojure]) :scope "test"] [clojure-complete/clojure-complete "0.2.3" :exclusions ([org.clojure/clojure]) :scope "test"])])

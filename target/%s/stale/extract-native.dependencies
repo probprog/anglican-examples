@@ -1,1 +1,0 @@
-([:dependencies ([gorilla-repl/gorilla-repl "0.3.4"] [org.clojure/clojure "1.6.0"] [embang/embang "0.4.9"])])
