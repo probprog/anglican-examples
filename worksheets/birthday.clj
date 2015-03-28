@@ -111,5 +111,19 @@
 ;; <=
 
 ;; **
-;;; Seems to work.
+;;; Seems to work. Let's compute the mode now:
 ;; **
+
+;; @@
+(def bucket-size 10)
+(->> u
+     (take 100)
+     (group-by #(quot % bucket-size))
+     (sort-by (comp - count second))
+     ffirst
+     (* bucket-size))
+
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-long'>200</span>","value":"200"}
+;; <=
