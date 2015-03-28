@@ -55,7 +55,7 @@
 
 ;; @@
 (def N 23)
-(def sampler (doquery :smc equal-birthday-in-a-group-of N))
+(def sampler (doquery :smc equal-birthday-in-a-group-of N :number-of-particles 1000))
 (def t (map #(if % 1 0) (map :eq (map get-predicts sampler))))
 ;; @@
 ;; =>
@@ -80,7 +80,7 @@
   (defquery num-people-in-room-needed-to-have-X-percent-chance-of-overlapping-birthday X 
     "num-people-in-room-needed-to-have-X-percent-chance-of-overlapping-birthday: "
      (let [num-people-in-room (sample (uniform-discrete 1 500))
-           outcomes (doquery :pgibbs equal-birthday-in-a-group-of num-people-in-room :number-of-partices 100)
+           outcomes (doquery :smc equal-birthday-in-a-group-of num-people-in-room :number-of-partices 1000)
            predicts (map get-predicts (take 1000 outcomes))
 		   probability (float (/ (count (filter true? predicts)) (count predicts)))]
        (observe (normal X 0.1) probability)
