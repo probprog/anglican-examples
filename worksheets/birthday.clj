@@ -68,7 +68,7 @@
 (float (/ (count (filter true? samples)) (count samples)))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-unkown'>0.515</span>","value":"0.515"}
+;;; {"type":"html","content":"<span class='clj-unkown'>0.507</span>","value":"0.507"}
 ;; <=
 
 ;; **
@@ -91,7 +91,7 @@
 ;; <=
 
 ;; @@
-(def sampler2 (doquery :smc num-people-in-room-needed-to-have-X-percent-chance-of-overlapping-birthday 0.9))
+(def sampler2 (doquery :smc num-people-in-room-needed-to-have-X-percent-chance-of-overlapping-birthday 0.9 :number-of-particles 100))
 (def u (map :N (map get-predicts sampler2)))
 
 ;; @@
@@ -102,6 +102,13 @@
 ;; @@
 (time (plot/histogram (take 100 u)))
 ;; @@
+;; ->
+;;; &quot;Elapsed time: 100790.725 msecs&quot;
+;;; 
+;; <-
+;; =>
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"92a1765d-e17b-4638-8876-a97109e28930","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"92a1765d-e17b-4638-8876-a97109e28930","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"92a1765d-e17b-4638-8876-a97109e28930"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"92a1765d-e17b-4638-8876-a97109e28930","values":[{"x":5.0,"y":0},{"x":66.375,"y":11.0},{"x":127.75,"y":13.0},{"x":189.125,"y":10.0},{"x":250.5,"y":18.0},{"x":311.875,"y":9.0},{"x":373.25,"y":12.0},{"x":434.625,"y":12.0},{"x":496.0,"y":14.0},{"x":557.375,"y":1.0},{"x":618.75,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"92a1765d-e17b-4638-8876-a97109e28930\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"92a1765d-e17b-4638-8876-a97109e28930\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"92a1765d-e17b-4638-8876-a97109e28930\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"92a1765d-e17b-4638-8876-a97109e28930\", :values ({:x 5.0, :y 0} {:x 66.375, :y 11.0} {:x 127.75, :y 13.0} {:x 189.125, :y 10.0} {:x 250.5, :y 18.0} {:x 311.875, :y 9.0} {:x 373.25, :y 12.0} {:x 434.625, :y 12.0} {:x 496.0, :y 14.0} {:x 557.375, :y 1.0} {:x 618.75, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;; <=
 
 ;; **
 ;;; Seems to work.
