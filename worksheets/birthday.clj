@@ -68,7 +68,7 @@
 (float (/ (count (filter true? samples)) (count samples)))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-unkown'>0.51</span>","value":"0.51"}
+;;; {"type":"html","content":"<span class='clj-unkown'>0.523</span>","value":"0.523"}
 ;; <=
 
 ;; **
@@ -103,15 +103,15 @@
 (time (plot/histogram (take 5000 u)))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 1247188.678817 msecs&quot;
+;;; &quot;Elapsed time: 1213887.240166 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"f3243b9a-886f-4eed-8077-cb384d9f90d5","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"f3243b9a-886f-4eed-8077-cb384d9f90d5","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"f3243b9a-886f-4eed-8077-cb384d9f90d5"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"f3243b9a-886f-4eed-8077-cb384d9f90d5","values":[{"x":39.0,"y":0},{"x":40.0,"y":5000.0},{"x":41.0,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"f3243b9a-886f-4eed-8077-cb384d9f90d5\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"f3243b9a-886f-4eed-8077-cb384d9f90d5\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"f3243b9a-886f-4eed-8077-cb384d9f90d5\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"f3243b9a-886f-4eed-8077-cb384d9f90d5\", :values ({:x 39.0, :y 0} {:x 40.0, :y 5000.0} {:x 41.0, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"e6395e57-91c9-4b6f-8915-fb19bdb5921f","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"e6395e57-91c9-4b6f-8915-fb19bdb5921f","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"e6395e57-91c9-4b6f-8915-fb19bdb5921f"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"e6395e57-91c9-4b6f-8915-fb19bdb5921f","values":[{"x":38.0,"y":0},{"x":39.0,"y":5000.0},{"x":40.0,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"e6395e57-91c9-4b6f-8915-fb19bdb5921f\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"e6395e57-91c9-4b6f-8915-fb19bdb5921f\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"e6395e57-91c9-4b6f-8915-fb19bdb5921f\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"e6395e57-91c9-4b6f-8915-fb19bdb5921f\", :values ({:x 38.0, :y 0} {:x 39.0, :y 5000.0} {:x 40.0, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
 ;; <=
 
 ;; **
-;;; Visually it would appear that this occurs around 39/40 people.  We can algorithmically find the mode for potential subsequent use:
+;;; Visually it would appear that this occurs around 38-40 people.  We can algorithmically find the mode for potential subsequent use:
 ;; **
 
 ;; @@
@@ -125,7 +125,7 @@
 
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-long'>39</span>","value":"39"}
+;;; {"type":"html","content":"<span class='clj-long'>38</span>","value":"38"}
 ;; <=
 
 ;; @@
