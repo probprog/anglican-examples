@@ -15,4 +15,4 @@ A repository of programs written in the probabilistic programming language [Angl
 ## Contributing
 
 1. Give back: issue [pull requests](https://bitbucket.org/fwood/anglican-examples/pull-request/new) to include new examples you've written in this shared repository.  
-2. Add comments and make suggestions in the issue tracker.
+2. Add comments and make suggestions in the [issue tracker](https://bitbucket.org/fwood/anglican-examples/issues).
