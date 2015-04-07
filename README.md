@@ -1,6 +1,6 @@
 # Anglican Examples
 
-A repository of programs in the new ebedded Anglican syntax and accessed through Gorilla RePL. 
+A repository of programs written in the new [Anglican language](https://bitbucket.org/dtolpin/embang/) and with interactive web-based interaction via [Gorilla REPL](http://gorilla-repl.org/). 
 
 # Install
 
