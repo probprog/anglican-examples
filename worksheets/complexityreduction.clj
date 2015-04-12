@@ -3,7 +3,7 @@
 ;; **
 ;;; # Complexity Reduction
 ;;; 
-;;; We'd like to infer what "order" of programming complexity probabilistic programming saves.
+;;; We'd like to infer what "order" of programming complexity probabilistic programming saves in terms of the functional form of the reduction factor in the number of lines of code required to write models.
 ;; **
 
 ;; @@
@@ -20,11 +20,12 @@
 ;; <=
 
 ;; **
-;;; To do this I'll use some data from my own personal coding history.  
+;;; To do this analysis I'll use some data from my own personal coding history.  
 ;; **
 
 ;; @@
-(def examples {:pdia  {:before 4000 :language "java"   :after 200}; Pfau's NIPS implementation
+(def examples 
+          {:pdia  {:before 4000 :language "java"   :after 200}    ; Pfau's NIPS implementation
            :ddpmo {:before 5000 :language "matlab" :after 400}    ; Willie's AISTATS implementation
            :crp   {:before 1500 :language "matlab" :after 100}    ; My PhD implementation
            :hpyp  {:before 7000 :language "java"   :after 100}    ; My AISTATS implementation
@@ -35,32 +36,36 @@
 (plot/list-plot data)
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"723e6d7a-13b6-46c5-baf6-aa5d93f36627","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"723e6d7a-13b6-46c5-baf6-aa5d93f36627","field":"data.y"}}],"marks":[{"type":"symbol","from":{"data":"723e6d7a-13b6-46c5-baf6-aa5d93f36627"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"fill":{"value":"steelblue"},"fillOpacity":{"value":1}},"update":{"shape":"circle","size":{"value":70},"stroke":{"value":"transparent"}},"hover":{"size":{"value":210},"stroke":{"value":"white"}}}}],"data":[{"name":"723e6d7a-13b6-46c5-baf6-aa5d93f36627","values":[{"x":5000,"y":400},{"x":1500,"y":100},{"x":7000,"y":100},{"x":250,"y":150},{"x":4000,"y":200}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"723e6d7a-13b6-46c5-baf6-aa5d93f36627\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"723e6d7a-13b6-46c5-baf6-aa5d93f36627\", :field \"data.y\"}}], :marks [{:type \"symbol\", :from {:data \"723e6d7a-13b6-46c5-baf6-aa5d93f36627\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 1}}, :update {:shape \"circle\", :size {:value 70}, :stroke {:value \"transparent\"}}, :hover {:size {:value 210}, :stroke {:value \"white\"}}}}], :data [{:name \"723e6d7a-13b6-46c5-baf6-aa5d93f36627\", :values ({:x 5000, :y 400} {:x 1500, :y 100} {:x 7000, :y 100} {:x 250, :y 150} {:x 4000, :y 200})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa","field":"data.y"}}],"marks":[{"type":"symbol","from":{"data":"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"fill":{"value":"steelblue"},"fillOpacity":{"value":1}},"update":{"shape":"circle","size":{"value":70},"stroke":{"value":"transparent"}},"hover":{"size":{"value":210},"stroke":{"value":"white"}}}}],"data":[{"name":"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa","values":[{"x":5000,"y":400},{"x":1500,"y":100},{"x":7000,"y":100},{"x":250,"y":150},{"x":4000,"y":200}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa\", :field \"data.y\"}}], :marks [{:type \"symbol\", :from {:data \"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 1}}, :update {:shape \"circle\", :size {:value 70}, :stroke {:value \"transparent\"}}, :hover {:size {:value 210}, :stroke {:value \"white\"}}}}], :data [{:name \"cf6ec415-4c11-42b5-b3a6-49cec9bf7faa\", :values ({:x 5000, :y 400} {:x 1500, :y 100} {:x 7000, :y 100} {:x 250, :y 150} {:x 4000, :y 200})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
 ;; <=
 
 ;; **
 ;;; The relationship between the input (original program length) and output (probabilistic program length) isn't obvious.  Are we making logarithmic gains or linear gains?
 ;;; 
-;;; To answer this question let's perform inference via a query.
+;;; To answer this question let's perform a Bayes factor inference via a query.
 ;;; 
 ;;; In this query we will consider two different models of code complexity; logarithmic savings and linear savings.  One could claim that linear savings with positive slope is indicative of a good job done; logarithmic savings would suggest that we are looking at a paradigm shift. 
 ;; **
+
+;; @@
+(log (+ 1 0))
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}
+;; <=
 
 ;; @@
   (defn logb [b x] (/ (log x) (log b))) ; log base b
   (with-primitive-procedures [logb] 
     (defquery which-reduction  
     (let [which (sample (discrete [1 1]))
-          offsetdist (normal 0 (sample (gamma 1 0.5)))
           func (case which 
-                     0 (let [base (+ 1 (sample (gamma 1 0.5)))
-                             offset (sample offsetdist)]
-                          [( fn  [x]  (+ ( logb base  x) offset)) 
-                           (list 'fn '[x] (list '+ (list 'logb base 'x) offset))])
-                     1 (let [slope (sample (normal 0 (sample (gamma 1 1))))
-                             offset (sample offsetdist)]
-                          [( fn  [x] (+   (* slope  x) offset))
-                           (list 'fn '[x] (list '+ (list '* slope 'x) offset))])
+                     0 (let [base (+ 1 (sample (gamma 1 0.5)))]
+                          [( fn  [x] (logb base (+ 1 x))) 
+                           (list 'fn '[x] (list 'logb base (list '+ 1 'x)) )])
+                     1 (let [slope (sample (normal 0 (sample (gamma 1 1))))]
+                          [( fn  [x] (* slope  x) )
+                           (list 'fn '[x] (list '* slope 'x))])
                     
                 )
           ]
@@ -73,8 +78,13 @@
 ;; <=
 
 ;; @@
-(def sampler (doquery :pcascade which-reduction nil))
-(def samples (drop 5000 (take 50000 sampler)))
+;(def sampler (doquery :pcascade which-reduction nil))
+;(def samples (drop 5000 (take 50000 sampler)))
+
+(def samples (->> (doquery :pcascade which-reduction nil :number-of-threads 500)
+                  (filter #(not= Double/NEGATIVE_INFINITY (get-log-weight %)))
+  				  (take 50000)
+  				  (drop 5000)))
 
 ;; @@
 ;; =>
@@ -83,19 +93,21 @@
 
 ;; @@
 ; we can either take the last sample as the MAP estimate (inference algorithm agnostic)
-(plot/compose (plot/list-plot (sort data)) (plot/plot (eval (:func (last (map get-predicts samples)))) [250 7000]))
-(:func (last (map get-predicts samples)))
+;(plot/compose (plot/list-plot (sort data)) 
+;              (plot/plot (eval (:func (last (map get-predicts samples)))) [250 7000]))
+;(:func (last (map get-predicts samples)))
 
-; or we can take the highest weight sample (best with SMC-based inference algorithms)
+; we can take the highest scoring sample as a MAP estimate
 (def highest-weight (last (sort (map :embang.state/log-weight  samples))))
 (def highest-weight-sample (filter  #(= highest-weight (:embang.state/log-weight %)) samples))
 (def highest-weight-func-text (first (map :func (map get-predicts highest-weight-sample))))
 (def highest-weight-func (eval highest-weight-func-text))
-(plot/compose (plot/list-plot (sort data)) (plot/plot highest-weight-func [250 7000]))
+(plot/compose (plot/list-plot (sort data)) 
+              (plot/plot highest-weight-func [250 7000]))
 highest-weight-func-text
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>fn</span>","value":"fn"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>x</span>","value":"x"}],"value":"[x]"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>+</span>","value":"+"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>logb</span>","value":"logb"},{"type":"html","content":"<span class='clj-double'>1.044746419679829</span>","value":"1.044746419679829"},{"type":"html","content":"<span class='clj-symbol'>x</span>","value":"x"}],"value":"(logb 1.044746419679829 x)"},{"type":"html","content":"<span class='clj-double'>-1.2838258657269828</span>","value":"-1.2838258657269828"}],"value":"(+ (logb 1.044746419679829 x) -1.2838258657269828)"}],"value":"(fn [x] (+ (logb 1.044746419679829 x) -1.2838258657269828))"}
+;;; {"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>fn</span>","value":"fn"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>x</span>","value":"x"}],"value":"[x]"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>logb</span>","value":"logb"},{"type":"html","content":"<span class='clj-double'>1.0394442904603172</span>","value":"1.0394442904603172"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-symbol'>+</span>","value":"+"},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"},{"type":"html","content":"<span class='clj-symbol'>x</span>","value":"x"}],"value":"(+ 1 x)"}],"value":"(logb 1.0394442904603172 (+ 1 x))"}],"value":"(fn [x] (logb 1.0394442904603172 (+ 1 x)))"}
 ;; <=
 
 ;; **
@@ -103,10 +115,10 @@ highest-weight-func-text
 ;; **
 
 ;; @@
-(plot/histogram (map :which (map get-predicts samples)))
+(plot/histogram (map :which (map get-predicts samples)) :normalize :probability)
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"9ae5661e-df8f-4f95-9ff4-e1480e52ae17","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"9ae5661e-df8f-4f95-9ff4-e1480e52ae17","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"9ae5661e-df8f-4f95-9ff4-e1480e52ae17"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"9ae5661e-df8f-4f95-9ff4-e1480e52ae17","values":[{"x":0.0,"y":0},{"x":0.05882352941176472,"y":33033.0},{"x":0.11764705882352944,"y":0.0},{"x":0.17647058823529416,"y":0.0},{"x":0.23529411764705888,"y":0.0},{"x":0.2941176470588236,"y":0.0},{"x":0.3529411764705883,"y":0.0},{"x":0.41176470588235303,"y":0.0},{"x":0.47058823529411775,"y":0.0},{"x":0.5294117647058825,"y":0.0},{"x":0.5882352941176472,"y":0.0},{"x":0.6470588235294119,"y":0.0},{"x":0.7058823529411766,"y":0.0},{"x":0.7647058823529413,"y":0.0},{"x":0.8235294117647061,"y":0.0},{"x":0.8823529411764708,"y":0.0},{"x":0.9411764705882355,"y":0.0},{"x":1.0000000000000002,"y":11967.0},{"x":1.058823529411765,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"9ae5661e-df8f-4f95-9ff4-e1480e52ae17\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"9ae5661e-df8f-4f95-9ff4-e1480e52ae17\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"9ae5661e-df8f-4f95-9ff4-e1480e52ae17\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"9ae5661e-df8f-4f95-9ff4-e1480e52ae17\", :values ({:x 0.0, :y 0} {:x 0.05882352941176472, :y 33033.0} {:x 0.11764705882352944, :y 0.0} {:x 0.17647058823529416, :y 0.0} {:x 0.23529411764705888, :y 0.0} {:x 0.2941176470588236, :y 0.0} {:x 0.3529411764705883, :y 0.0} {:x 0.41176470588235303, :y 0.0} {:x 0.47058823529411775, :y 0.0} {:x 0.5294117647058825, :y 0.0} {:x 0.5882352941176472, :y 0.0} {:x 0.6470588235294119, :y 0.0} {:x 0.7058823529411766, :y 0.0} {:x 0.7647058823529413, :y 0.0} {:x 0.8235294117647061, :y 0.0} {:x 0.8823529411764708, :y 0.0} {:x 0.9411764705882355, :y 0.0} {:x 1.0000000000000002, :y 11967.0} {:x 1.058823529411765, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"11e48774-80fa-4cc1-a77e-8fafee018d8d","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"11e48774-80fa-4cc1-a77e-8fafee018d8d","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"11e48774-80fa-4cc1-a77e-8fafee018d8d"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"11e48774-80fa-4cc1-a77e-8fafee018d8d","values":[{"x":0.0,"y":0},{"x":0.05882352941176472,"y":0.8704444444444445},{"x":0.11764705882352944,"y":0.0},{"x":0.17647058823529416,"y":0.0},{"x":0.23529411764705888,"y":0.0},{"x":0.2941176470588236,"y":0.0},{"x":0.3529411764705883,"y":0.0},{"x":0.41176470588235303,"y":0.0},{"x":0.47058823529411775,"y":0.0},{"x":0.5294117647058825,"y":0.0},{"x":0.5882352941176472,"y":0.0},{"x":0.6470588235294119,"y":0.0},{"x":0.7058823529411766,"y":0.0},{"x":0.7647058823529413,"y":0.0},{"x":0.8235294117647061,"y":0.0},{"x":0.8823529411764708,"y":0.0},{"x":0.9411764705882355,"y":0.0},{"x":1.0000000000000002,"y":0.12955555555555556},{"x":1.058823529411765,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"11e48774-80fa-4cc1-a77e-8fafee018d8d\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"11e48774-80fa-4cc1-a77e-8fafee018d8d\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"11e48774-80fa-4cc1-a77e-8fafee018d8d\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"11e48774-80fa-4cc1-a77e-8fafee018d8d\", :values ({:x 0.0, :y 0} {:x 0.05882352941176472, :y 0.8704444444444445} {:x 0.11764705882352944, :y 0.0} {:x 0.17647058823529416, :y 0.0} {:x 0.23529411764705888, :y 0.0} {:x 0.2941176470588236, :y 0.0} {:x 0.3529411764705883, :y 0.0} {:x 0.41176470588235303, :y 0.0} {:x 0.47058823529411775, :y 0.0} {:x 0.5294117647058825, :y 0.0} {:x 0.5882352941176472, :y 0.0} {:x 0.6470588235294119, :y 0.0} {:x 0.7058823529411766, :y 0.0} {:x 0.7647058823529413, :y 0.0} {:x 0.8235294117647061, :y 0.0} {:x 0.8823529411764708, :y 0.0} {:x 0.9411764705882355, :y 0.0} {:x 1.0000000000000002, :y 0.12955555555555556} {:x 1.058823529411765, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
 ;; <=
 
 ;; **
