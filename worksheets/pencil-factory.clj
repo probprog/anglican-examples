@@ -61,7 +61,16 @@
 ;;; one at a time in sequence as they emerge from the factory to see if they are
 ;;; defective.
 ;;; 
-;;; (Some stuff in here, but not sure how to put in formulae...)
+;;; We let @@y_1,\ldots,y_N@@, with @@y_n\in\{0,1\}@@ be a set of defective/ not defective observations. A
+;;; very simple approach would be to model each observation yn as an independent Bernoulli
+;;; trial, with some unknown success rate @@p@@. We place a prior distribution on @@p@@, the shape of
+;;; which represents the strength of our conviction that pencil factories produce 50% defective
+;;; pencils. A traditional choice of prior might be a uniform distribution on the interval @@[0, 1]@@,
+;;; the maximum entropy distribution for @@p@@ which has an expected value of @@0.5@@. In this case,
+;;; our full model for the pencil factory data is
+;;; 
+;;; $$p\sim U[0,1]$$
+;;; $$y_n\sim Bern(p).$$
 ;;; 
 ;;; Suppose the very first pencil that comes off the conveyor belt is defective. We can write this
 ;;; model as a probabilistic program, complete with observing our defective pencil, as
