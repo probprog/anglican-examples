@@ -65,28 +65,24 @@
 ;; **
 
 ;; @@
-(def observations [[0.3 -1.5 1 0.2]])
+(def observations [[0.3 -1.5 1 0.2] [0.9 1.5 0 0.3]])
 
 (defquery simple-hmm
   [initial-model transition-model emission-model observations]
   "a simple hidden markov model"
-  (let [initial-state (sample initial-model)
+  (let [initial-state (sample (initial-model))
         next-state (fn [prev-state] (sample (transition-model prev-state)))
-        get-state (mem (fn get-state [state] (if (<= state 0) initial-state (sample (transition-model (get-state (- state 1)))))))
+        get-state (mem (fn get-state [state] (if (<= state 0) initial-state (next-state (get-state (- state 1))))))
         count-obs (count observations)	; Number of observations for each state
         count-states (count (first observations)) ; Number of latent state variables
-        ;states (map get-state (range 1 count-states))]	
-        states [(get-state 1) (get-state 2) (get-state 3)]]
-    ;(map (fn [obs] (map (fn [x y] (observe (emission-model y) x) obs states))) observations)
+        state-idx (range 0 count-states)
+        states (map get-state state-idx)]	
+    (map (fn [obs] (map (fn [x y] (observe (emission-model y) x)) obs states)) observations) ; Observe multiple samples
     (predict :s states)
     ))
 
-(take 3 (map get-predicts (doquery :smc simple-hmm [])))
+(take 3 (map :s (map get-predicts (doquery :smc simple-hmm [initial-model transition-model emission-model observations] :number-of-particles 1000))))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/simple-hmm</span>","value":"#'pencil-factory/simple-hmm"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"}],"value":"((2 2 2 2) (2 2 2 2) (2 2 2 2))"}
 ;; <=
-
-;; @@
-
-;; @@
