@@ -14,6 +14,7 @@
          [runtime :exclude [distribution]] 
          emit
          [state :only [get-predicts get-log-weight]]]
+        distribution
         [anglib crp]
         [clojure.string :only (join split blank?)]))
 ;; @@
@@ -34,6 +35,13 @@
 ;; **
 
 ;; @@
+map?
+;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-unkown'>#&lt;core$map_QMARK_ clojure.core$map_QMARK_@1e3227b0&gt;</span>","value":"#<core$map_QMARK_ clojure.core$map_QMARK_@1e3227b0>"}
+;; <=
+
+;; @@
 (defdist dirac*
   "Dirac distribution"
   [x] []
@@ -41,25 +49,6 @@
   (observe [this value] (if (= x value) 0.0 (- (/ 1.0 0.0)))))
 (with-primitive-procedures [dirac*]
   (defm dirac [& args] (apply dirac* args)))
-
-(defmacro distribution [args & body] 
-  `(let [~'samples (ref (doquery :pcascade (query ~@body) ~args :number-of-threads 100
-                                 :number-of-particles 10))
-         ~'next-sample 
-         (fn []
-           (let [~'current-sample
-                 (dosync
-                   (let [[~'first-sample & ~'more-samples] @~'samples]
-                     (ref-set ~'samples ~'more-samples)
-                     ~'first-sample))]
-             (if (> (get-log-weight ~'current-sample) (/ -1. 0.))
-               (get-predicts ~'current-sample)
-               (recur))))]
-
-     (reify anglican.runtime.distribution
-       (sample [~'this] (~'next-sample))
-       (observe [~'this ~'value] (assert false "cannot call observe on  
-                                               distributions of this type")))))   
 
 (def bayes-net-natural
    (distribution [] 
