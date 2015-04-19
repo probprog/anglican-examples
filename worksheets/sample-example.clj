@@ -9,13 +9,13 @@
 ;; @@
 (ns sample-example
   (:require [gorilla-plot.core :as plot]
-            [embang
+            [anglican
              [emit :refer [query]]
              [inference :refer [infer warmup]]
              [core :refer [load-algorithm]]
              [state :as state]])
-  (:use [mrepl core]
-        [embang emit runtime]))
+  (:use [anglican core runtime emit [state :only [get-predicts get-log-weight]]]))
+        
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}

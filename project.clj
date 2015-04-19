@@ -5,9 +5,7 @@
             :url "http://www.gnu.org/licenses/gpl.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/data.csv "0.1.2"]
-                 [embang "0.6.4"]
-                 [net.mikera/core.matrix "0.33.2"]
-                 [net.mikera/vectorz-clj "0.29.0"]]
+                 [anglican "0.6.5"]]
   :plugins [[lein-gorilla "0.3.4"]]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

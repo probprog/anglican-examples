@@ -10,8 +10,7 @@
   (:require [gorilla-plot.core :as plot]
             [clojure.core.matrix :as m])
   (:use clojure.repl
-        [mrepl core]
-        [embang runtime emit]
+        [anglican core runtime emit [state :only [get-predicts]]] 
         [anglib crp]
         [clojure.string :only (join split blank?)]))
 ;; @@
