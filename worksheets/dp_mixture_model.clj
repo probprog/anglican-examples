@@ -131,8 +131,6 @@
   [input-data]
   (let
     [ 
-      
-
       ; DPmem is a procedure that takes two arguments -- the concentration
       ; to a Dirichlet process and a base sampling procedure
       ; DPmem returns a procedure 
