@@ -68,26 +68,17 @@
 ;; <=
 
 ;; @@
-(defn foo 9)
-
-
-(def bar (distribution [] (foo)))
-
-
-(def outer (with-primitive-procedures [dirac]
+(def outer (with-primitive-procedures [inner dirac]
   (distribution []
     (let [a (sample (uniform-discrete 0 10))
-          _ (prn a)
-          _ (prn (instance? anglican.runtime.distribution (foo)))
           _ (prn (inner 10))
           b (:c (sample (inner a)))
           _ (prn b)
           ]
-      ;(observe (dirac (+ a b)) 13)
+      (observe (dirac (+ a b)) 13)
       (predict :a a)))))
 
-;(sample (inner 10))
-(sample bar)
+(sample outer)
 ;; @@
 
 ;; **
