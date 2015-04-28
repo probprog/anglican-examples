@@ -343,7 +343,8 @@
                     get-stick-picking-procedure-from-cache 
                       (mem 
                         (fn [args] 
-                          (create-pitman-yor-stick-breaking-process 								  concentration discount)))]
+                          (create-pitman-yor-stick-breaking-process 
+                            concentration discount)))]
                 
                 (fn [& varargs]
                   ; when the returned function is called, 
