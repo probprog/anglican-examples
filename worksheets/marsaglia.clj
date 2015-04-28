@@ -157,9 +157,6 @@
 ;; **
 
 ;; @@
-
-
-
 (plot/compose  
   (plot/list-plot 
      (->> (linspace 3 11 100)
