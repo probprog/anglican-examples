@@ -1,10 +1,10 @@
 # Anglican Examples
 
-A repository of programs written in the probabilistic programming language [Anglican](https://bitbucket.org/dtolpin/embang/) with browser-based interaction via [Gorilla REPL](http://gorilla-repl.org/). 
+A repository of programs written in the probabilistic programming language [Anglican](https://bitbucket.org/probprog/anglican/) with browser-based interaction via [Gorilla REPL](http://gorilla-repl.org/). 
 
 ## Install
 
-1. Download and install [Leinegen](http://leiningen.org/)
+1. Download and install [Leiningen](http://leiningen.org/)
 2. Use [git](http://git-scm.com/) to fork and clone this repository
 
 ## Usage
