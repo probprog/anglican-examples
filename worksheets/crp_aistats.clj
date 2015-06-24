@@ -111,7 +111,7 @@
 ;; **
 
 ;; @@
-(def number-of-particles 10000)
+(def number-of-particles 1000)
 (def number-of-samples 100000)
 
 (def samples
@@ -123,7 +123,7 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 25839.253 msecs&quot;
+;;; &quot;Elapsed time: 26368.61 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
@@ -135,7 +135,8 @@
 ;; **
 
 ;; @@
-(def num-sample-range [1e1 2e1 5e1 1e2 2e2 5e2 1e3 2e3 5e3 1e4])
+(def num-sample-range (mapv (partial * number-of-samples)
+                            [1e-2 2e-2 5e-2 1e-1 2e-1 5e-1 1]))
   
 (def KL-errors
   (map (fn [n]
@@ -166,5 +167,5 @@
                 :y-title "log KL divergne")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8","values":[{"x":1.0,"y":0.8212074055783224},{"x":1.301029995663981,"y":0.6161939275386032},{"x":1.6989700043360185,"y":-0.057251425387462904},{"x":2.0,"y":-0.13133387040578912},{"x":2.301029995663981,"y":-0.2013740762230533},{"x":2.6989700043360183,"y":-0.6794233231386524},{"x":2.9999999999999996,"y":-0.6648134274673143},{"x":3.301029995663981,"y":-0.3594195312103305},{"x":3.6989700043360187,"y":-0.33115899405938587},{"x":4.0,"y":-0.6820407482543657}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"2f1dc1e4-7113-4d41-8a39-4e2c945cf8e8\", :values ({:x 1.0, :y 0.8212074055783224} {:x 1.301029995663981, :y 0.6161939275386032} {:x 1.6989700043360185, :y -0.057251425387462904} {:x 2.0, :y -0.13133387040578912} {:x 2.301029995663981, :y -0.2013740762230533} {:x 2.6989700043360183, :y -0.6794233231386524} {:x 2.9999999999999996, :y -0.6648134274673143} {:x 3.301029995663981, :y -0.3594195312103305} {:x 3.6989700043360187, :y -0.33115899405938587} {:x 4.0, :y -0.6820407482543657})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"96696576-6102-4183-ac9f-b93c01c8cf0d","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"96696576-6102-4183-ac9f-b93c01c8cf0d","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"96696576-6102-4183-ac9f-b93c01c8cf0d"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"96696576-6102-4183-ac9f-b93c01c8cf0d","values":[{"x":2.9999999999999996,"y":0.4776986302903052},{"x":3.301029995663981,"y":-1.7019687045420024},{"x":3.6989700043360187,"y":-0.5083937862986254},{"x":4.0,"y":-0.34122708697509885},{"x":4.30102999566398,"y":-0.4685443149339312},{"x":4.698970004336019,"y":-0.828471390993382},{"x":5.0,"y":-0.897951491699526}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"96696576-6102-4183-ac9f-b93c01c8cf0d\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"96696576-6102-4183-ac9f-b93c01c8cf0d\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"96696576-6102-4183-ac9f-b93c01c8cf0d\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"96696576-6102-4183-ac9f-b93c01c8cf0d\", :values ({:x 2.9999999999999996, :y 0.4776986302903052} {:x 3.301029995663981, :y -1.7019687045420024} {:x 3.6989700043360187, :y -0.5083937862986254} {:x 4.0, :y -0.34122708697509885} {:x 4.30102999566398, :y -0.4685443149339312} {:x 4.698970004336019, :y -0.828471390993382} {:x 5.0, :y -0.897951491699526})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
 ;; <=
