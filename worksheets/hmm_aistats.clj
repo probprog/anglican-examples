@@ -14,9 +14,9 @@
         [anglican core runtime emit [state :only [get-predicts get-log-weight]]]))
 
 (defn expected-value
-  "applies v-fn to each sample and computes weighted expectation"
-  [v-fn samples]
-  (let [vs (map v-fn samples)
+  "applies f to each sample and computes weighted expectation"
+  [f samples]
+  (let [vs (map f samples)
         lws (map get-log-weight samples)
         vlws (map vector vs lws)
         max-lw (reduce max lws)]
