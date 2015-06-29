@@ -127,8 +127,8 @@
 ;; **
 
 ;; @@
-(def number-of-particles 100)
-(def number-of-samples 1e4)
+(def number-of-particles 1000)
+(def number-of-samples 100000)
 
 (def samples
   (->> (doquery :smc hmm
@@ -137,8 +137,14 @@
                  trans-dists
                  obs-dists]
                 :number-of-particles number-of-particles)
-       (take number-of-samples)))
+       (take number-of-samples)
+       doall
+       time))
 ;; @@
+;; ->
+;;; &quot;Elapsed time: 20617.298 msecs&quot;
+;;; 
+;; <-
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;aistats-examples/samples</span>","value":"#'aistats-examples/samples"}
 ;; <=
@@ -148,8 +154,8 @@
 ;; **
 
 ;; @@
-(def num-sample-range [1e1 2e1 5e1 1e2 2e2 5e2 1e3 2e3 5e3 1e4])
-  
+(def num-sample-range (mapv (partial * number-of-samples)
+                            [1e-2 2e-2 5e-2 1e-1 2e-1 5e-1 1]))  
 (def L2-errors
    (map (fn [n]
           (->> ;; use first n samples
@@ -180,5 +186,5 @@
                 :y-title "log L2 error")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"216300d3-d75c-4600-ae70-9036afc98671","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"216300d3-d75c-4600-ae70-9036afc98671","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"216300d3-d75c-4600-ae70-9036afc98671"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"216300d3-d75c-4600-ae70-9036afc98671","values":[{"x":1.0,"y":0.3249885645325282},{"x":1.301029995663981,"y":-0.024447161982432575},{"x":1.6989700043360185,"y":-0.23298269224626425},{"x":2.0,"y":-0.3480096780140054},{"x":2.301029995663981,"y":-0.6960900071163203},{"x":2.6989700043360183,"y":-1.2619408911255918},{"x":2.9999999999999996,"y":-1.1610210746493141},{"x":3.301029995663981,"y":-1.613537581796188},{"x":3.6989700043360187,"y":-1.87766126313233},{"x":4.0,"y":-2.4619350967159694}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"216300d3-d75c-4600-ae70-9036afc98671\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"216300d3-d75c-4600-ae70-9036afc98671\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"216300d3-d75c-4600-ae70-9036afc98671\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"216300d3-d75c-4600-ae70-9036afc98671\", :values ({:x 1.0, :y 0.3249885645325282} {:x 1.301029995663981, :y -0.024447161982432575} {:x 1.6989700043360185, :y -0.23298269224626425} {:x 2.0, :y -0.3480096780140054} {:x 2.301029995663981, :y -0.6960900071163203} {:x 2.6989700043360183, :y -1.2619408911255918} {:x 2.9999999999999996, :y -1.1610210746493141} {:x 3.301029995663981, :y -1.613537581796188} {:x 3.6989700043360187, :y -1.87766126313233} {:x 4.0, :y -2.4619350967159694})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"1618e811-a89f-4316-8e3d-bc9e7d1d7448","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"1618e811-a89f-4316-8e3d-bc9e7d1d7448","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"1618e811-a89f-4316-8e3d-bc9e7d1d7448"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"1618e811-a89f-4316-8e3d-bc9e7d1d7448","values":[{"x":2.9999999999999996,"y":-1.295938840288193},{"x":3.301029995663981,"y":-1.6832808445666025},{"x":3.6989700043360187,"y":-2.09148474979796},{"x":4.0,"y":-2.5261875330880317},{"x":4.30102999566398,"y":-2.541125446126106},{"x":4.698970004336019,"y":-3.0552105323874708},{"x":5.0,"y":-3.2454206731444883}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"1618e811-a89f-4316-8e3d-bc9e7d1d7448\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"1618e811-a89f-4316-8e3d-bc9e7d1d7448\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"1618e811-a89f-4316-8e3d-bc9e7d1d7448\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"1618e811-a89f-4316-8e3d-bc9e7d1d7448\", :values ({:x 2.9999999999999996, :y -1.295938840288193} {:x 3.301029995663981, :y -1.6832808445666025} {:x 3.6989700043360187, :y -2.09148474979796} {:x 4.0, :y -2.5261875330880317} {:x 4.30102999566398, :y -2.541125446126106} {:x 4.698970004336019, :y -3.0552105323874708} {:x 5.0, :y -3.2454206731444883})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
 ;; <=
