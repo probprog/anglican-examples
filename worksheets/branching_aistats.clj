@@ -63,24 +63,26 @@
 ;; **
 
 ;; @@
-(def fib-seq 
-  "Lazily constructed Fibonacci sequence"
-  ((fn rfib [a b] 
-     (lazy-seq (cons a (rfib b (+ a b)))))
-   0 1))
+(defn fib [n]
+  "returns the n-th number in the Fibonacci sequence"
+  (loop [a 0 b 1 m 0]
+    (if (= m n)
+      a
+      (recur b (+ a b) (inc m)))))
 
-(defquery branching
-    "A simple example illustrating flow control with
-    dependence on random choices"
-    []
-    (let [count-prior (poisson 4)
-          r (sample count-prior)
-          l (if (< 4 r)
-              6
-              (+ (nth fib-seq (* 3 r))
-                 (sample count-prior)))]
-      (observe (poisson l) 6)
-      (predict :r r)))
+(with-primitive-procedures [fib]
+  (defquery branching
+      "A simple example illustrating flow control with
+      dependence on random choices"
+      []
+      (let [count-prior (poisson 4)
+            r (sample count-prior)
+            l (if (< 4 r)
+                6
+                (+ (fib (* 3 r))
+                   (sample count-prior)))]
+        (observe (poisson l) 6)
+        (predict :r r))))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;aistats-examples/branching</span>","value":"#'aistats-examples/branching"}
@@ -120,7 +122,8 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 14969.755 msecs&quot;
+;;; &quot;Elapsed time: 17729.413 msecs&quot;
+;;; &quot;Elapsed time: 15887.415 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
@@ -161,5 +164,5 @@
                 :y-title "log KL divergence")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b","values":[{"x":4.0,"y":-3.215900303342155},{"x":4.30102999566398,"y":-3.445978612623462},{"x":4.698970004336019,"y":-3.4236042486354545},{"x":5.0,"y":-3.786992864385388},{"x":5.301029995663981,"y":-3.8528464206865047},{"x":5.698970004336018,"y":-3.937137862645385},{"x":5.999999999999999,"y":-3.954679007938705}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"c7c11bb4-d6a2-482b-a460-48b1e81d0b6b\", :values ({:x 4.0, :y -3.215900303342155} {:x 4.30102999566398, :y -3.445978612623462} {:x 4.698970004336019, :y -3.4236042486354545} {:x 5.0, :y -3.786992864385388} {:x 5.301029995663981, :y -3.8528464206865047} {:x 5.698970004336018, :y -3.937137862645385} {:x 5.999999999999999, :y -3.954679007938705})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"2234f802-b002-4fe2-8c5e-af02314460fd","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"2234f802-b002-4fe2-8c5e-af02314460fd","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"2234f802-b002-4fe2-8c5e-af02314460fd"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"2234f802-b002-4fe2-8c5e-af02314460fd","values":[{"x":4.0,"y":-3.1972575833401145},{"x":4.30102999566398,"y":-3.272572652885998},{"x":4.698970004336019,"y":-3.4153746293802727},{"x":5.0,"y":-3.624578429519559},{"x":5.301029995663981,"y":-3.706523024414158},{"x":5.698970004336018,"y":-3.823534624917694},{"x":5.999999999999999,"y":-3.9251341533195254}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"2234f802-b002-4fe2-8c5e-af02314460fd\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"2234f802-b002-4fe2-8c5e-af02314460fd\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"2234f802-b002-4fe2-8c5e-af02314460fd\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"2234f802-b002-4fe2-8c5e-af02314460fd\", :values ({:x 4.0, :y -3.1972575833401145} {:x 4.30102999566398, :y -3.272572652885998} {:x 4.698970004336019, :y -3.4153746293802727} {:x 5.0, :y -3.624578429519559} {:x 5.301029995663981, :y -3.706523024414158} {:x 5.698970004336018, :y -3.823534624917694} {:x 5.999999999999999, :y -3.9251341533195254})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
 ;; <=
