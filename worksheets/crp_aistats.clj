@@ -9,48 +9,32 @@
 ;; @@
  (ns aistats-examples
   (:require [gorilla-plot.core :as plot]
-            [clojure.core.matrix :as m])
+            [clojure.core.matrix :as m]
+            [anglican.stat :as s]
+            :reload)
   (:use clojure.repl
         [anglican 
           core runtime emit 
-          [state :only [get-predicts get-log-weight]]]))
-
-(defn empirical-frequencies
-  "applies f to each sample and returns a map of weighted 
-  counts for each unique value"
-  [f samples]
-  (let [log-Z (- (reduce 
-                   log-sum-exp
-                   (map get-log-weight samples))
-                 (log (count samples)))]
-    (reduce (fn [freqs s]
-              (let [v (f s)]
-                (assoc freqs
-                  v (+ (get freqs v 0.0)
-                       (exp (- (get-log-weight s)
-                               log-Z))))))
-            {}
-            samples)))
+          [state :only [get-predicts get-log-weight]]
+          [inference :only [collect-by]]]))
  
-(defn normalize
-  "divides each element in a collection by the sum of the elements"
-  [coll]
-  (let [norm (reduce + coll)]
-    (map #(/ % norm) coll)))
-
-(defn kl-div 
-  "KL divergence between two vectors of normalized probabilities"
-  [p-probs q-probs]
-  (reduce + 
-          (map (fn [p q]
-                 (if (> p 0.0)
-                   (* p (log (/ p q)))
-                   0.0))
-               p-probs
-               q-probs)))
+(defn kl-categorical
+  "KL divergence between two categorical distributions"
+  [p-categories q-categories]
+  (let [p-norm (reduce + (map second p-categories))
+        q-norm (reduce + (map second q-categories))
+        q (into {} (for [[c w] q-categories] 
+                     [c (/ w q-norm)]))]
+    (reduce + 
+            (for [[c w] p-categories]
+                   (if (> w 0.0)
+                     (* (/ w p-norm)
+                        (log (/ (double (/ w p-norm))
+                                (double (get q c 0.0)))))
+                     0.0)))))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;aistats-examples/kl-div</span>","value":"#'aistats-examples/kl-div"}
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;aistats-examples/kl-categorical</span>","value":"#'aistats-examples/kl-categorical"}
 ;; <=
 
 ;; **
@@ -98,9 +82,11 @@
  
 (def posterior 
   "posterior on number of states, calculated by enumeration"
-  (mapv exp 
+  (zipmap 
+    (range 1 11)
+    (mapv exp 
         [-11.4681 -1.0437 -0.9126 -1.6553 -3.0348 
-         -4.9985 -7.5829 -10.9459 -15.6461 -21.6521]))
+         -4.9985 -7.5829 -10.9459 -15.6461 -21.6521])))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;aistats-examples/posterior</span>","value":"#'aistats-examples/posterior"}
@@ -123,7 +109,7 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 25961.107 msecs&quot;
+;;; &quot;Elapsed time: 46874.117 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
@@ -131,7 +117,7 @@
 ;; <=
 
 ;; **
-;;; Calculate KL error relative to true posterior as a function of number of samples
+;;; Calculate L2 error relative to true posterior as a function of number of samples
 ;; **
 
 ;; @@
@@ -141,12 +127,9 @@
 (def KL-errors
   (map (fn [n]
          (->> (take n samples)
-              (empirical-frequencies 
-                (comp :num-clusters get-predicts))
-     		  (into (sorted-map))
-			  vals
-		      normalize
-              (#(kl-div % posterior))))
+              (collect-by :num-clusters)
+              s/empirical-distribution
+              (#(kl-categorical % posterior))))
        num-sample-range))
 ;; @@
 ;; =>
@@ -164,8 +147,8 @@
                 :joined true
                 :color "#05A"
                 :x-title "log number of samples"
-                :y-title "log KL divergne")
+                :y-title "log L2 error")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7","values":[{"x":2.9999999999999996,"y":0.5847741015509476},{"x":3.301029995663981,"y":0.5840569064482795},{"x":3.6989700043360187,"y":0.2184475177424339},{"x":4.0,"y":-0.014439147514519931},{"x":4.30102999566398,"y":-0.20483197796363287},{"x":4.698970004336019,"y":-0.5283781261069781},{"x":5.0,"y":-0.4901700026691292}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"a7b9b0b2-72f1-4a86-a3f9-8cb7ee48a4a7\", :values ({:x 2.9999999999999996, :y 0.5847741015509476} {:x 3.301029995663981, :y 0.5840569064482795} {:x 3.6989700043360187, :y 0.2184475177424339} {:x 4.0, :y -0.014439147514519931} {:x 4.30102999566398, :y -0.20483197796363287} {:x 4.698970004336019, :y -0.5283781261069781} {:x 5.0, :y -0.4901700026691292})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":50,"bottom":20,"right":10},"data":[{"name":"1de2f4d2-2cab-448c-8568-bb491e3d257a","values":[{"x":2.9999999999999996,"y":-0.10090380180482968},{"x":3.301029995663981,"y":-0.6011536244852838},{"x":3.6989700043360187,"y":-1.623207648409456},{"x":4.0,"y":-0.5631326608503568},{"x":4.30102999566398,"y":-0.656868280921334},{"x":4.698970004336019,"y":-0.6897469422680568},{"x":5.0,"y":-0.7460849466018051}]}],"marks":[{"type":"line","from":{"data":"1de2f4d2-2cab-448c-8568-bb491e3d257a"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"1de2f4d2-2cab-448c-8568-bb491e3d257a","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"1de2f4d2-2cab-448c-8568-bb491e3d257a","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 50, :bottom 20, :right 10}, :data [{:name \"1de2f4d2-2cab-448c-8568-bb491e3d257a\", :values ({:x 2.9999999999999996, :y -0.10090380180482968} {:x 3.301029995663981, :y -0.6011536244852838} {:x 3.6989700043360187, :y -1.623207648409456} {:x 4.0, :y -0.5631326608503568} {:x 4.30102999566398, :y -0.656868280921334} {:x 4.698970004336019, :y -0.6897469422680568} {:x 5.0, :y -0.7460849466018051})}], :marks [{:type \"line\", :from {:data \"1de2f4d2-2cab-448c-8568-bb491e3d257a\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"1de2f4d2-2cab-448c-8568-bb491e3d257a\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"1de2f4d2-2cab-448c-8568-bb491e3d257a\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
