@@ -9,43 +9,15 @@
 ;; @@
 (ns aistats-examples
   (:require [gorilla-plot.core :as plot]
-            [clojure.core.matrix :as m])
+            [clojure.core.matrix :as m]
+            [anglican.stat :as s])
   (:use clojure.repl
         [anglican 
           core runtime emit 
-          [state :only [get-predicts get-log-weight]]]))
-
-(defn expected-value
-  "applies f to each sample and computes weighted expectation"
-  [f samples]
-  (let [vs (map f samples)
-        lws (map get-log-weight samples)
-        vlws (map vector vs lws)
-        max-lw (reduce max lws)]
-    (loop [vlws vlws
-           sum-wv 0.0
-           sum-w 0.0]
-      (if-let [[v lw] (first vlws)]
-        (let [w (exp (- lw max-lw))]
-          (recur (rest vlws)
-                 (m/add sum-wv (m/mul w v))
-                 (m/add sum-w w)))
-        (m/div sum-wv sum-w)))))
+          [state :only [get-predicts get-log-weight]]
+          [inference :only [collect-by]]]))
 
 (defn- square [x] (m/mul x x))
-
-(defn empirical-moments 
-  "returns the empirical mean and variance
-  of predicts with key k"
-  [k samples]
-  (let [mean (expected-value 
-               (comp k get-predicts) 
-               samples)
-        var (m/sub (expected-value 
-                     (comp square k get-predicts) 
-                     samples)
-                   (m/mul mean mean))]
-    [mean var]))
 
 (defn kl-normal 
   "calculates the kl divergence beween two 
@@ -103,7 +75,7 @@
 (def number-of-samples 100000)
 
 (def samples
-  (->> (doquery :importance 
+  (->> (doquery :lmh
                 gaussian 
                 [[9.0 8.0] (sqrt 2.0) 1.0 (sqrt 5.0)])
        (take number-of-samples)
@@ -111,7 +83,7 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 1390.979 msecs&quot;
+;;; &quot;Elapsed time: 5011.655 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
@@ -128,14 +100,10 @@
   
 (def KL-errors
   (map (fn [n]
-         (let [[m v] (empirical-moments 
-                       :mu 
-                       (take n samples))]
-			(kl-normal m 
-                       (sqrt v) 
-                       (:mean posterior) 
-                       (:sd posterior))))
-
+         (let [mus (collect-by :mu (take n samples))
+			   mean (s/empirical-mean mus)
+               sd (s/empirical-std mus)]
+			(kl-normal mean sd (:mean posterior) (:sd posterior))))
        num-sample-range))
 ;; @@
 ;; =>
@@ -156,9 +124,5 @@
                 :y-title "log KL divergence")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0","values":[{"x":2.0,"y":0.30004109913107},{"x":2.301029995663981,"y":-0.2790969418855227},{"x":2.6989700043360183,"y":-1.2244700697886148},{"x":2.9999999999999996,"y":-1.7582330164791993},{"x":3.301029995663981,"y":-1.7235884677425082},{"x":3.6989700043360187,"y":-3.3696456431517854},{"x":4.0,"y":-3.0623355848200124},{"x":4.30102999566398,"y":-2.213387302085764},{"x":4.698970004336019,"y":-2.6633524961666413},{"x":5.0,"y":-3.0569730690688823}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"e6cbcd00-6ef3-42d2-a772-2b2eee1f9df0\", :values ({:x 2.0, :y 0.30004109913107} {:x 2.301029995663981, :y -0.2790969418855227} {:x 2.6989700043360183, :y -1.2244700697886148} {:x 2.9999999999999996, :y -1.7582330164791993} {:x 3.301029995663981, :y -1.7235884677425082} {:x 3.6989700043360187, :y -3.3696456431517854} {:x 4.0, :y -3.0623355848200124} {:x 4.30102999566398, :y -2.213387302085764} {:x 4.698970004336019, :y -2.6633524961666413} {:x 5.0, :y -3.0569730690688823})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":50,"bottom":20,"right":10},"data":[{"name":"75bf816a-5aaa-4750-a2d9-7463e74db235","values":[{"x":2.0,"y":-0.37298302246990905},{"x":2.301029995663981,"y":-0.8949494007839545},{"x":2.6989700043360183,"y":-0.6964922791436191},{"x":2.9999999999999996,"y":-1.4221033657305007},{"x":3.301029995663981,"y":-0.9883462468102788},{"x":3.6989700043360187,"y":-1.5681344385457023},{"x":4.0,"y":-1.1364573893222167},{"x":4.30102999566398,"y":-1.2257725471021892},{"x":4.698970004336019,"y":-2.202983704777243},{"x":5.0,"y":-2.3792338200716108}]}],"marks":[{"type":"line","from":{"data":"75bf816a-5aaa-4750-a2d9-7463e74db235"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"75bf816a-5aaa-4750-a2d9-7463e74db235","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"75bf816a-5aaa-4750-a2d9-7463e74db235","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 50, :bottom 20, :right 10}, :data [{:name \"75bf816a-5aaa-4750-a2d9-7463e74db235\", :values ({:x 2.0, :y -0.37298302246990905} {:x 2.301029995663981, :y -0.8949494007839545} {:x 2.6989700043360183, :y -0.6964922791436191} {:x 2.9999999999999996, :y -1.4221033657305007} {:x 3.301029995663981, :y -0.9883462468102788} {:x 3.6989700043360187, :y -1.5681344385457023} {:x 4.0, :y -1.1364573893222167} {:x 4.30102999566398, :y -1.2257725471021892} {:x 4.698970004336019, :y -2.202983704777243} {:x 5.0, :y -2.3792338200716108})}], :marks [{:type \"line\", :from {:data \"75bf816a-5aaa-4750-a2d9-7463e74db235\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"75bf816a-5aaa-4750-a2d9-7463e74db235\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"75bf816a-5aaa-4750-a2d9-7463e74db235\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
-
-;; @@
-
-;; @@
