@@ -48,7 +48,7 @@
   (let [precision-prior (gamma a b)]
     (loop [observations observations
            state-proc (CRP alpha)
-           obs-dists []
+           obs-dists {}
            states []]
       (if (empty? observations)
         (do 
@@ -109,7 +109,7 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 46874.117 msecs&quot;
+;;; &quot;Elapsed time: 55802.416 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
@@ -150,5 +150,5 @@
                 :y-title "log L2 error")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":50,"bottom":20,"right":10},"data":[{"name":"1de2f4d2-2cab-448c-8568-bb491e3d257a","values":[{"x":2.9999999999999996,"y":-0.10090380180482968},{"x":3.301029995663981,"y":-0.6011536244852838},{"x":3.6989700043360187,"y":-1.623207648409456},{"x":4.0,"y":-0.5631326608503568},{"x":4.30102999566398,"y":-0.656868280921334},{"x":4.698970004336019,"y":-0.6897469422680568},{"x":5.0,"y":-0.7460849466018051}]}],"marks":[{"type":"line","from":{"data":"1de2f4d2-2cab-448c-8568-bb491e3d257a"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"1de2f4d2-2cab-448c-8568-bb491e3d257a","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"1de2f4d2-2cab-448c-8568-bb491e3d257a","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 50, :bottom 20, :right 10}, :data [{:name \"1de2f4d2-2cab-448c-8568-bb491e3d257a\", :values ({:x 2.9999999999999996, :y -0.10090380180482968} {:x 3.301029995663981, :y -0.6011536244852838} {:x 3.6989700043360187, :y -1.623207648409456} {:x 4.0, :y -0.5631326608503568} {:x 4.30102999566398, :y -0.656868280921334} {:x 4.698970004336019, :y -0.6897469422680568} {:x 5.0, :y -0.7460849466018051})}], :marks [{:type \"line\", :from {:data \"1de2f4d2-2cab-448c-8568-bb491e3d257a\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"1de2f4d2-2cab-448c-8568-bb491e3d257a\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"1de2f4d2-2cab-448c-8568-bb491e3d257a\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":50,"bottom":20,"right":10},"data":[{"name":"41480058-43dc-42a8-9204-d4ab65b1d5ad","values":[{"x":2.9999999999999996,"y":-0.9669234864200613},{"x":3.301029995663981,"y":-0.16131507351386684},{"x":3.6989700043360187,"y":-0.28906146659682513},{"x":4.0,"y":-0.2133681664221509},{"x":4.30102999566398,"y":-0.2506125509669224},{"x":4.698970004336019,"y":-0.35667809223826724},{"x":5.0,"y":-0.3926010749243385}]}],"marks":[{"type":"line","from":{"data":"41480058-43dc-42a8-9204-d4ab65b1d5ad"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"41480058-43dc-42a8-9204-d4ab65b1d5ad","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"41480058-43dc-42a8-9204-d4ab65b1d5ad","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 50, :bottom 20, :right 10}, :data [{:name \"41480058-43dc-42a8-9204-d4ab65b1d5ad\", :values ({:x 2.9999999999999996, :y -0.9669234864200613} {:x 3.301029995663981, :y -0.16131507351386684} {:x 3.6989700043360187, :y -0.28906146659682513} {:x 4.0, :y -0.2133681664221509} {:x 4.30102999566398, :y -0.2506125509669224} {:x 4.698970004336019, :y -0.35667809223826724} {:x 5.0, :y -0.3926010749243385})}], :marks [{:type \"line\", :from {:data \"41480058-43dc-42a8-9204-d4ab65b1d5ad\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"41480058-43dc-42a8-9204-d4ab65b1d5ad\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"41480058-43dc-42a8-9204-d4ab65b1d5ad\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
