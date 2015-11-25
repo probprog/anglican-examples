@@ -695,6 +695,12 @@
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;gmm-iris-collapsed/plot-compose</span>","value":"#'gmm-iris-collapsed/plot-compose"}
 ;; <=
 
+;; **
+;;; # Average execution time
+;;; 
+;;; Legend: (red) uncollapsed model, (green) collaped model.
+;; **
+
 ;; @@
 (plot-compose
   (list (first collapsed-results) (first uncollapsed-results))
@@ -703,6 +709,12 @@
 ;; =>
 ;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50},"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":[7468,18785]},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"8dada010-5a8f-43dc-8c25-502fa1d6c01c","field":"data.y"}}],"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"data":[{"name":"8dada010-5a8f-43dc-8c25-502fa1d6c01c","values":[{"x":7468.0,"y":0},{"x":8725.444444444445,"y":0.0},{"x":9982.88888888889,"y":0.0},{"x":11240.333333333336,"y":0.0},{"x":12497.777777777781,"y":0.0},{"x":13755.222222222226,"y":0.0},{"x":15012.666666666672,"y":193.0},{"x":16270.111111111117,"y":6.0},{"x":17527.555555555562,"y":0.0},{"x":18785.000000000007,"y":1.0},{"x":20042.444444444453,"y":0}]},{"name":"4c9d4e43-5581-4506-aef9-e7be3f9c327d","values":[{"x":7468.0,"y":0},{"x":8725.444444444445,"y":200.0},{"x":9982.88888888889,"y":0.0},{"x":11240.333333333336,"y":0.0},{"x":12497.777777777781,"y":0.0},{"x":13755.222222222226,"y":0.0},{"x":15012.666666666672,"y":0.0},{"x":16270.111111111117,"y":0.0},{"x":17527.555555555562,"y":0.0},{"x":18785.000000000007,"y":0.0},{"x":20042.444444444453,"y":0}]}],"marks":[{"type":"line","from":{"data":"8dada010-5a8f-43dc-8c25-502fa1d6c01c"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"green"},"fillOpacity":{"value":0.4},"stroke":{"value":"green"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}},{"type":"line","from":{"data":"4c9d4e43-5581-4506-aef9-e7be3f9c327d"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"red"},"fillOpacity":{"value":0.4},"stroke":{"value":"red"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}, :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain [7468 18785]} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"8dada010-5a8f-43dc-8c25-502fa1d6c01c\", :field \"data.y\"}}], :axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :data ({:name \"8dada010-5a8f-43dc-8c25-502fa1d6c01c\", :values ({:x 7468.0, :y 0} {:x 8725.444444444445, :y 0.0} {:x 9982.88888888889, :y 0.0} {:x 11240.333333333336, :y 0.0} {:x 12497.777777777781, :y 0.0} {:x 13755.222222222226, :y 0.0} {:x 15012.666666666672, :y 193.0} {:x 16270.111111111117, :y 6.0} {:x 17527.555555555562, :y 0.0} {:x 18785.000000000007, :y 1.0} {:x 20042.444444444453, :y 0})} {:name \"4c9d4e43-5581-4506-aef9-e7be3f9c327d\", :values ({:x 7468.0, :y 0} {:x 8725.444444444445, :y 200.0} {:x 9982.88888888889, :y 0.0} {:x 11240.333333333336, :y 0.0} {:x 12497.777777777781, :y 0.0} {:x 13755.222222222226, :y 0.0} {:x 15012.666666666672, :y 0.0} {:x 16270.111111111117, :y 0.0} {:x 17527.555555555562, :y 0.0} {:x 18785.000000000007, :y 0.0} {:x 20042.444444444453, :y 0})}), :marks ({:type \"line\", :from {:data \"8dada010-5a8f-43dc-8c25-502fa1d6c01c\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"green\"}, :fillOpacity {:value 0.4}, :stroke {:value \"green\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}} {:type \"line\", :from {:data \"4c9d4e43-5581-4506-aef9-e7be3f9c327d\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"red\"}, :fillOpacity {:value 0.4}, :stroke {:value \"red\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}})}}"}
 ;; <=
+
+;; **
+;;; # Average Normalised Mutual Information (the higher, the better)
+;;; 
+;;; Legend: (red) uncollapsed model, (green) collaped model.
+;; **
 
 ;; @@
 (plot-compose
