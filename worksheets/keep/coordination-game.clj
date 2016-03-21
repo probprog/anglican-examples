@@ -21,7 +21,7 @@
             [anglican.stat :as stat])
   (:use [anglican core emit runtime
          [inference :refer [infer equalize]]
-         [state :refer [get-predicts get-log-weight]]]))
+         [state :refer [get-predicts]]]))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
@@ -51,7 +51,7 @@
   (observe [this value] (observe (flip pub-preference) (= value :pub))))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-unkown'>#&lt;MultiFn clojure.lang.MultiFn@4b6b6b38&gt;</span>","value":"#<MultiFn clojure.lang.MultiFn@4b6b6b38>"}
+;;; {"type":"html","content":"<span class='clj-unkown'>#&lt;MultiFn clojure.lang.MultiFn@2d4cca52&gt;</span>","value":"#<MultiFn clojure.lang.MultiFn@2d4cca52>"}
 ;; <=
 
 ;; **
@@ -62,7 +62,7 @@
 (repeatedly 10 #(sample (location 0.6)))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"(:pub :starbucks :pub :pub :starbucks :pub :pub :pub :starbucks :pub)"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"(:starbucks :starbucks :pub :pub :starbucks :pub :starbucks :starbucks :pub :pub)"}
 ;; <=
 
 ;; **
@@ -88,8 +88,8 @@
                 (repeatedly 1000 #(sample ((conditional meet-by-chance)))))))
 ;; @@
 ;; ->
-;;; p(Amy at pub) = 0.584
-;;; p(Both at same location) = 0.503
+;;; p(Amy at pub) = 0.595
+;;; p(Both at same location) = 0.486
 ;;; 
 ;; <-
 ;; =>
@@ -122,7 +122,7 @@
 (frequencies (repeatedly 1000 #(sample ((conditional meet-at-pub-inefficient)))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"[:location :pub]"}],"value":"{:location :pub}"},{"type":"html","content":"<span class='clj-long'>632</span>","value":"632"}],"value":"[{:location :pub} 632]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"[:location :starbucks]"}],"value":"{:location :starbucks}"},{"type":"html","content":"<span class='clj-long'>368</span>","value":"368"}],"value":"[{:location :starbucks} 368]"}],"value":"{{:location :pub} 632, {:location :starbucks} 368}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"[:location :pub]"}],"value":"{:location :pub}"},{"type":"html","content":"<span class='clj-long'>667</span>","value":"667"}],"value":"[{:location :pub} 667]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"[:location :starbucks]"}],"value":"{:location :starbucks}"},{"type":"html","content":"<span class='clj-long'>333</span>","value":"333"}],"value":"[{:location :starbucks} 333]"}],"value":"{{:location :pub} 667, {:location :starbucks} 333}"}
 ;; <=
 
 ;; **
@@ -144,7 +144,7 @@
 (frequencies (repeatedly 1000 #(sample ((conditional meet-at-pub-efficient)))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"[:location :starbucks]"}],"value":"{:location :starbucks}"},{"type":"html","content":"<span class='clj-long'>346</span>","value":"346"}],"value":"[{:location :starbucks} 346]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"[:location :pub]"}],"value":"{:location :pub}"},{"type":"html","content":"<span class='clj-long'>654</span>","value":"654"}],"value":"[{:location :pub} 654]"}],"value":"{{:location :starbucks} 346, {:location :pub} 654}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"[:location :pub]"}],"value":"{:location :pub}"},{"type":"html","content":"<span class='clj-long'>681</span>","value":"681"}],"value":"[{:location :pub} 681]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"[:location :starbucks]"}],"value":"{:location :starbucks}"},{"type":"html","content":"<span class='clj-long'>319</span>","value":"319"}],"value":"[{:location :starbucks} 319]"}],"value":"{{:location :pub} 681, {:location :starbucks} 319}"}
 ;; <=
 
 ;; **
@@ -232,8 +232,8 @@
 ;; @@
 ;; ->
 ;;; recursion depth:  0
-;;; p(Amy at pub):  0.708
-;;; p(Bob at pub):  0.619
+;;; p(Amy at pub):  0.704
+;;; p(Bob at pub):  0.59
 ;;; 
 ;; <-
 ;; =>
@@ -251,8 +251,8 @@
 ;; @@
 ;; ->
 ;;; recursion depth:  1
-;;; p(Amy at pub):  0.683
-;;; p(Bob at pub):  0.783
+;;; p(Amy at pub):  0.67
+;;; p(Bob at pub):  0.789
 ;;; 
 ;; <-
 ;; =>
@@ -273,11 +273,11 @@
 ;; @@
 ;; ->
 ;;; recursion depth:  2
-;;; p(Amy at pub):  0.833
-;;; p(Bob at pub):  0.871
+;;; p(Amy at pub):  0.809
+;;; p(Bob at pub):  0.872
 ;;; recursion depth:  3
-;;; p(Amy at pub):  0.916
-;;; p(Bob at pub):  0.931
+;;; p(Amy at pub):  0.929
+;;; p(Bob at pub):  0.953
 ;;; 
 ;; <-
 ;; =>
@@ -356,17 +356,17 @@
 ;; @@
 ;; ->
 ;;; recursion depth:  0
-;;; p(Amy at pub):  0.531
-;;; p(Bob at pub):  0.605
+;;; p(Amy at pub):  0.501
+;;; p(Bob at pub):  0.615
 ;;; recursion depth:  1
-;;; p(Amy at pub):  0.482
-;;; p(Bob at pub):  0.784
+;;; p(Amy at pub):  0.493
+;;; p(Bob at pub):  0.817
 ;;; recursion depth:  2
-;;; p(Amy at pub):  0.296
-;;; p(Bob at pub):  0.885
+;;; p(Amy at pub):  0.297
+;;; p(Bob at pub):  0.892
 ;;; recursion depth:  3
-;;; p(Amy at pub):  0.182
-;;; p(Bob at pub):  0.941
+;;; p(Amy at pub):  0.177
+;;; p(Bob at pub):  0.937
 ;;; 
 ;; <-
 ;; =>
