@@ -126,7 +126,7 @@
 ;; <=
 
 ;; **
-;;; This model is simple enough that rejection sampling is feasible: we get a valid sample with p(Both at same location), which we computed above. For more complicated queries, this quickly becomes unreasonable.
+;;; This model is simple enough that rejection sampling is feasible: we get a valid sample with @@p(\text{Both at same location})@@, which we computed above. For more complicated queries, this quickly becomes unreasonable.
 ;;; 
 ;;; Fortunately, we can re-write the model above such that it no longer has a hard constraint. Instead of sampling both values and having a deterministic observation, we can `observe` instead of `sample` one of the locations directly.
 ;;; 
