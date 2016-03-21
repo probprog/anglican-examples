@@ -3,15 +3,13 @@
 ;; **
 ;;; # Funny Distributions
 ;;; 
-;;; Welcome to gorilla :-)
+;;; Implicitly, we assume that all programs in Anglican halt with probability one.
 ;;; 
-;;; Shift + enter evaluates code. Hit ctrl+g twice in quick succession or click the menu icon (upper-right corner) for more commands ...
-;;; 
-;;; It's a good habit to run each worksheet in its own namespace: feel free to use the declaration we've provided below if you'd like.
+;;; If this isn't the case, then we have defined a very funny distribution!
 ;; **
 
 ;; @@
-(ns funnydistributions
+(ns funny-distributions
   (:require [gorilla-plot.core :as plot])
   (:use clojure.repl
         [anglican core runtime emit [state :only [get-predicts]]] 
