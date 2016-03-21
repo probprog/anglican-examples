@@ -36,7 +36,7 @@
             [gorilla-plot.core :as plot])
   (:use [anglican core emit runtime
          [inference :refer [infer equalize]]
-         [state :refer [get-predicts get-log-weight]]]))
+         [state :refer [get-predicts]]]))
 
 ;; @@
 ;; =>
@@ -122,7 +122,7 @@
 (expected-utility (draw-samples drill-or-not-no-sounding 5000))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>22.052</span>","value":"22.052"}],"value":"[:drill 22.052]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 22.052, :dontdrill 0.0}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>20.696</span>","value":"20.696"}],"value":"[:drill 20.696]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 20.696, :dontdrill 0.0}"}
 ;; <=
 
 ;; **
@@ -168,7 +168,7 @@
 (expected-utility (draw-samples drill-or-not-with-sounding-no-arg 5000))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-26.176</span>","value":"-26.176"}],"value":"[:drill -26.176]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -26.176, :dontdrill 0.0}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-25.768</span>","value":"-25.768"}],"value":"[:drill -25.768]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -25.768, :dontdrill 0.0}"}
 ;; <=
 
 ;; **
@@ -212,10 +212,10 @@
 ;; **
 
 ;; @@
- (expected-utility  (draw-samples  drill-or-not-with-sounding 5000 :diffuse))
+(expected-utility (draw-samples drill-or-not-with-sounding 5000 :diffuse))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-27.766</span>","value":"-27.766"}],"value":"[:drill -27.766]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -27.766, :dontdrill 0.0}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-27.622</span>","value":"-27.622"}],"value":"[:drill -27.622]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -27.622, :dontdrill 0.0}"}
 ;; <=
 
 ;; **
@@ -226,7 +226,7 @@
 (map #(expected-utility (draw-samples drill-or-not-with-sounding 5000 %)) [:diffuse :open :closed])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-25.264</span>","value":"-25.264"}],"value":"[:drill -25.264]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -25.264, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>33.068</span>","value":"33.068"}],"value":"[:drill 33.068]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 33.068, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>71.684</span>","value":"71.684"}],"value":"[:drill 71.684]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 71.684, :dontdrill 0.0}"}],"value":"({:drill -25.264, :dontdrill 0.0} {:drill 33.068, :dontdrill 0.0} {:drill 71.684, :dontdrill 0.0})"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-26.152</span>","value":"-26.152"}],"value":"[:drill -26.152]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -26.152, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>30.8</span>","value":"30.8"}],"value":"[:drill 30.8]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 30.8, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>75.32</span>","value":"75.32"}],"value":"[:drill 75.32]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 75.32, :dontdrill 0.0}"}],"value":"({:drill -26.152, :dontdrill 0.0} {:drill 30.8, :dontdrill 0.0} {:drill 75.32, :dontdrill 0.0})"}
 ;; <=
 
 ;; **
@@ -288,25 +288,22 @@
 
 ;; @@
 (defn posterior-estimate [N observation] 
-  (->> (doquery :pimh 
-                well-state 
-                [observation] 
-                :number-of-particles 
-                100)
+  (->> (doquery :pimh well-state [observation] 
+                :number-of-particles 100)
      (take N)
      (map #(vector 
              (:well-state (get-predicts %)) 
              (:log-weight %)))
      (stat/empirical-distribution)))
+
 (def N 5000)
 (posterior-estimate N :diffuse)
 
 (defn expected-utility-of-action [posterior action]
-  (reduce + (map #(* (utility2 
-                       action 
-                       (key %)) 
+  (reduce + (map #(* (utility action (key %)) 
                      (val %)) 
                  posterior)))
+
 (expected-utility-of-action (posterior-estimate N :diffuse) :drill)
 
 (defn expected-utility [N actions observation]
@@ -327,7 +324,7 @@
 (map (partial expected-utility N [:drill :dontdrill]) [:diffuse :open :closed])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>-30.17199999999664</span>","value":"-30.17199999999664"}],"value":"[:drill -30.17199999999664]"}],"value":"{:dontdrill 0.0, :drill -30.17199999999664}"}],"value":"[:diffuse {:dontdrill 0.0, :drill -30.17199999999664}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>30.79400000000064</span>","value":"30.79400000000064"}],"value":"[:drill 30.79400000000064]"}],"value":"{:dontdrill 0.0, :drill 30.79400000000064}"}],"value":"[:open {:dontdrill 0.0, :drill 30.79400000000064}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>85.23799999999572</span>","value":"85.23799999999572"}],"value":"[:drill 85.23799999999572]"}],"value":"{:dontdrill 0.0, :drill 85.23799999999572}"}],"value":"[:closed {:dontdrill 0.0, :drill 85.23799999999572}]"}],"value":"([:diffuse {:dontdrill 0.0, :drill -30.17199999999664}] [:open {:dontdrill 0.0, :drill 30.79400000000064}] [:closed {:dontdrill 0.0, :drill 85.23799999999572}])"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>-28.575999999996732</span>","value":"-28.575999999996732"}],"value":"[:drill -28.575999999996732]"}],"value":"{:dontdrill 0.0, :drill -28.575999999996732}"}],"value":"[:diffuse {:dontdrill 0.0, :drill -28.575999999996732}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>33.464000000000574</span>","value":"33.464000000000574"}],"value":"[:drill 33.464000000000574]"}],"value":"{:dontdrill 0.0, :drill 33.464000000000574}"}],"value":"[:open {:dontdrill 0.0, :drill 33.464000000000574}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>86.88199999999566</span>","value":"86.88199999999566"}],"value":"[:drill 86.88199999999566]"}],"value":"{:dontdrill 0.0, :drill 86.88199999999566}"}],"value":"[:closed {:dontdrill 0.0, :drill 86.88199999999566}]"}],"value":"([:diffuse {:dontdrill 0.0, :drill -28.575999999996732}] [:open {:dontdrill 0.0, :drill 33.464000000000574}] [:closed {:dontdrill 0.0, :drill 86.88199999999566}])"}
 ;; <=
 
 ;; **
@@ -353,7 +350,7 @@
 
 (make-rational-policy [:drill :dontdrill] 
                       [:closed :diffuse :open] 
-                      expected-utility)
+                      #(expected-utility N %1 %2))
 ;; @@
 ;; =>
 ;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"}],"value":"[:open :drill]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"}],"value":"[:diffuse :dontdrill]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"}],"value":"[:closed :drill]"}],"value":"{:open :drill, :diffuse :dontdrill, :closed :drill}"}
