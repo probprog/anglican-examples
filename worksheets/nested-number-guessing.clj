@@ -29,8 +29,7 @@
 (ns nested-number-guessing
   (:require [gorilla-plot.core :as plot])
   (:use clojure.repl
-        [anglican core runtime emit [state :only [get-predicts get-log-weight]]] 
-        [clojure.string :only (join split blank?)]))
+        [anglican core runtime emit [state :only [get-predicts]]]))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
@@ -54,9 +53,9 @@
       (predict :c c))))
 
 ;(:c (get-predicts (first 
-(with-primitive-procedures [doquery dirac get-predicts get-log-weight]
+(with-primitive-procedures [doquery dirac get-predicts :log-weight]
   (defquery outer []
-    (let [valid-sample (fn [x]  (= (- (/ 0.0 1.0)) (get-log-weight x)))
+    (let [valid-sample (fn [x]  (= (- (/ 0.0 1.0)) (:log-weight x)))
           a (sample (uniform-discrete 0 10))
           b (:c (get-predicts (first (filter valid-sample (take 100 (doquery :smc inner [a] :debug true :number-of-particles 1))))))
           ;_ (prn b)
@@ -78,7 +77,7 @@
 ;; @@
 (plot/histogram (->>
                   (doquery :lmh outer [])
-                  (filter #(= (- (/ 0.0 1.0)) (get-log-weight %)))
+                  (filter #(= (- (/ 0.0 1.0)) (:log-weight %)))
                   (take 10000)
                   (map get-predicts)
                   (map :a))
@@ -86,9 +85,5 @@
 
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"63535e4c-d7e1-46fe-9c83-12b72acb4d93","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"63535e4c-d7e1-46fe-9c83-12b72acb4d93","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"63535e4c-d7e1-46fe-9c83-12b72acb4d93"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"63535e4c-d7e1-46fe-9c83-12b72acb4d93","values":[{"x":4.0,"y":0},{"x":4.333333333333333,"y":0.2642},{"x":4.666666666666666,"y":0.0},{"x":4.999999999999999,"y":0.0},{"x":5.333333333333332,"y":0.1862},{"x":5.666666666666665,"y":0.0},{"x":5.999999999999998,"y":0.0},{"x":6.333333333333331,"y":0.1407},{"x":6.666666666666664,"y":0.0},{"x":6.999999999999997,"y":0.0},{"x":7.33333333333333,"y":0.1529},{"x":7.666666666666663,"y":0.0},{"x":7.9999999999999964,"y":0.0},{"x":8.33333333333333,"y":0.1176},{"x":8.666666666666664,"y":0.0},{"x":8.999999999999998,"y":0.0},{"x":9.333333333333332,"y":0.1384},{"x":9.666666666666666,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":20,"top":10,"right":10,"left":50}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"63535e4c-d7e1-46fe-9c83-12b72acb4d93\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"63535e4c-d7e1-46fe-9c83-12b72acb4d93\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"63535e4c-d7e1-46fe-9c83-12b72acb4d93\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"63535e4c-d7e1-46fe-9c83-12b72acb4d93\", :values ({:x 4.0, :y 0} {:x 4.333333333333333, :y 0.2642} {:x 4.666666666666666, :y 0.0} {:x 4.999999999999999, :y 0.0} {:x 5.333333333333332, :y 0.1862} {:x 5.666666666666665, :y 0.0} {:x 5.999999999999998, :y 0.0} {:x 6.333333333333331, :y 0.1407} {:x 6.666666666666664, :y 0.0} {:x 6.999999999999997, :y 0.0} {:x 7.33333333333333, :y 0.1529} {:x 7.666666666666663, :y 0.0} {:x 7.9999999999999964, :y 0.0} {:x 8.33333333333333, :y 0.1176} {:x 8.666666666666664, :y 0.0} {:x 8.999999999999998, :y 0.0} {:x 9.333333333333332, :y 0.1384} {:x 9.666666666666666, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 20, :top 10, :right 10, :left 50}}}"}
+;;; {"type":"vega","content":{"axes":[{"scale":"x","type":"x"},{"scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"fd9bab90-0371-4b71-aec7-1efcd2c7926c","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"fd9bab90-0371-4b71-aec7-1efcd2c7926c","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"fd9bab90-0371-4b71-aec7-1efcd2c7926c"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"interpolate":{"value":"step-before"},"fill":{"value":"steelblue"},"fillOpacity":{"value":0.4},"stroke":{"value":"steelblue"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"fd9bab90-0371-4b71-aec7-1efcd2c7926c","values":[{"x":4.0,"y":0},{"x":4.333333333333333,"y":0.2414},{"x":4.666666666666666,"y":0.0},{"x":4.999999999999999,"y":0.0},{"x":5.333333333333332,"y":0.2194},{"x":5.666666666666665,"y":0.0},{"x":5.999999999999998,"y":0.0},{"x":6.333333333333331,"y":0.1541},{"x":6.666666666666664,"y":0.0},{"x":6.999999999999997,"y":0.0},{"x":7.33333333333333,"y":0.1595},{"x":7.666666666666663,"y":0.0},{"x":7.9999999999999964,"y":0.0},{"x":8.33333333333333,"y":0.1175},{"x":8.666666666666664,"y":0.0},{"x":8.999999999999998,"y":0.0},{"x":9.333333333333332,"y":0.1081},{"x":9.666666666666666,"y":0}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":40,"top":10,"right":10,"left":55}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:scale \"x\", :type \"x\"} {:scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"fd9bab90-0371-4b71-aec7-1efcd2c7926c\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"fd9bab90-0371-4b71-aec7-1efcd2c7926c\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"fd9bab90-0371-4b71-aec7-1efcd2c7926c\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :interpolate {:value \"step-before\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 0.4}, :stroke {:value \"steelblue\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"fd9bab90-0371-4b71-aec7-1efcd2c7926c\", :values ({:x 4.0, :y 0} {:x 4.333333333333333, :y 0.2414} {:x 4.666666666666666, :y 0.0} {:x 4.999999999999999, :y 0.0} {:x 5.333333333333332, :y 0.2194} {:x 5.666666666666665, :y 0.0} {:x 5.999999999999998, :y 0.0} {:x 6.333333333333331, :y 0.1541} {:x 6.666666666666664, :y 0.0} {:x 6.999999999999997, :y 0.0} {:x 7.33333333333333, :y 0.1595} {:x 7.666666666666663, :y 0.0} {:x 7.9999999999999964, :y 0.0} {:x 8.33333333333333, :y 0.1175} {:x 8.666666666666664, :y 0.0} {:x 8.999999999999998, :y 0.0} {:x 9.333333333333332, :y 0.1081} {:x 9.666666666666666, :y 0})}], :width 400, :height 247.2188, :padding {:bottom 40, :top 10, :right 10, :left 55}}}"}
 ;; <=
-
-;; @@
-
-;; @@
