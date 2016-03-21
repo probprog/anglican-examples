@@ -1,44 +1,25 @@
 ;; gorilla-repl.fileformat = 1
 
 ;; **
-;;; # AUTOMATIC BAYESIAN INFERENCE AS PROGRAMMING
+;;; # The "Pencil Factory": a simple beta-binomial example
 ;;; 
 ;;; Probabilistic generative models can be written concisely as probabilistic programs. In this
 ;;; short exercise we will outline the basic structure of a probabilistic program, and show an
 ;;; example of automatic posterior inference.
 ;;; 
-;;; First we import the necessary libraries to use m!,
+;;; First we import the necessary libraries to use Anglican,
 ;; **
 
 ;; @@
 (ns pencil-factory
-  (:require [gorilla-plot.core :as plot])
+  (:require [gorilla-plot.core :as plot]
+            [anglican.stat :as stat])
   (:use clojure.repl
-        [anglican core runtime emit [state :only [get-predicts]]] 
-        [anglib crp]
-        [clojure.string :only (join split blank?)]))
+        [anglican core runtime emit [state :only [get-predicts]]]))
 ;; @@
-
-;; **
-;;; It will also be useful to define functions for calculating the sample mean and variance,
-;; **
-
-;; @@
-(defn mean
-  "Calculate the mean of x"
-  [x]
-  (/ (reduce + 0 x) (count x)))
-
-(defn variance
-  "Calculate the (unbiased) sample variance of x"
-  [x]
-  (let [x-bar (mean x)
-        x2-bar (mean (map #(Math/pow % 2) x))
-        n (count x)]
-    (if (< n 2)
-      0
-      (* (/ n (- n 1)) (- x2-bar (Math/pow x-bar 2))))))
-;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
+;; <=
 
 ;; **
 ;;; A classical example problem deals with estimating the failure rate of a process, as in the
@@ -62,8 +43,8 @@
 ;;; the maximum entropy distribution for @@p@@ which has an expected value of @@0.5@@. In this case,
 ;;; our full model for the pencil factory data is
 ;;; 
-;;; $$p\sim U[0,1]$$
-;;; $$y_n\sim Bern(p).$$
+;;; $$p\sim \mathrm{Uniform}[0,1]$$
+;;; $$y_n\sim \mathrm{Bernoulli}(p).$$
 ;;; 
 ;;; Suppose the very first pencil that comes off the conveyor belt is defective. We can write this
 ;;; model as a probabilistic program, complete with observing our defective pencil, as
@@ -76,6 +57,9 @@
            (observe (flip p) false)
            (predict :p p)))
 ;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/run-pencil-factory</span>","value":"#'pencil-factory/run-pencil-factory"}
+;; <=
 
 ;; **
 ;;; Now we run the query and plot a histogram of the posterior distribution over p given that we observe one defective pencil.
@@ -87,9 +71,12 @@
 (plot/histogram samples)
 
 
-[(float (mean samples))
- (float (variance samples))]
+[(float (stat/mean samples))
+ (float (stat/variance samples))]
 ;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33249813</span>","value":"0.33249813"},{"type":"html","content":"<span class='clj-unkown'>0.05498733</span>","value":"0.05498733"}],"value":"[0.33249813 0.05498733]"}
+;; <=
 
 ;; **
 ;;; Recall that a uniform-continuous distribution over the interval [0, 1] is identical to a Beta distribution with pseudocounts a = b = 1. After observing K successes from N trials, we can compute the posterior expectation and variance of p analytically:
@@ -123,6 +110,9 @@
   [a b N K]
   (var-beta (+ a K) (- (+ b N) K)))
 ;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/var-beta-pos</span>","value":"#'pencil-factory/var-beta-pos"}
+;; <=
 
 ;; @@
 (let [a 1
@@ -132,6 +122,9 @@
   [(float (exp-beta-pos a b n k))
    (float (var-beta-pos a b n k))])
 ;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33333334</span>","value":"0.33333334"},{"type":"html","content":"<span class='clj-unkown'>0.055555556</span>","value":"0.055555556"}],"value":"[0.33333334 0.055555556]"}
+;; <=
 
 ;; **
 ;;; We see these values closely agree with the ones found empirically.
@@ -146,6 +139,9 @@
            (observe (binomial n p) k)
            (predict :p p)))
 ;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/run-pencil-factory</span>","value":"#'pencil-factory/run-pencil-factory"}
+;; <=
 
 ;; **
 ;;; This redefines the previous query, but lets us condition on i.i.d Bernoulli samples. Now, introducting 10 true and 3 false pseudocounts, and observing 7 false observations we get,
@@ -162,12 +158,15 @@
 (plot/histogram samples)
 
 
-[(float (mean samples))
- (float (variance samples))]
+[(float (stat/mean samples))
+ (float (stat/variance samples))]
 
 [(float (exp-beta-pos a b n k ))
  (float (var-beta-pos a b n k))]
 ;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.5</span>","value":"0.5"},{"type":"html","content":"<span class='clj-unkown'>0.011904762</span>","value":"0.011904762"}],"value":"[0.5 0.011904762]"}
+;; <=
 
 ;; **
 ;;; which as we expect gives p approximately equal to 0.5.
@@ -186,6 +185,9 @@
        (observe (binomial n p) k)
        (predict :p p)))
 ;; @@
+;; =>
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/run-pencil-factory</span>","value":"#'pencil-factory/run-pencil-factory"}
+;; <=
 
 ;; **
 ;;; Notice the hack we introduce to take care of the cases p=0 and p=1. This is because the implementation of the binomial distribution we use cannot handle these cases.
@@ -200,9 +202,12 @@
 (plot/histogram samples)
 
 
-[(float (mean samples))
- (float (variance samples))]
+[(float (stat/mean samples))
+ (float (stat/variance samples))]
 
 [(float (exp-beta-pos 1 1 n k ))
  (float (var-beta-pos 1 1 n k))]
 ;; @@
+;; =>
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33333334</span>","value":"0.33333334"},{"type":"html","content":"<span class='clj-unkown'>0.017094018</span>","value":"0.017094018"}],"value":"[0.33333334 0.017094018]"}
+;; <=
