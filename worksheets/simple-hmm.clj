@@ -6,7 +6,7 @@
 ;; **
 
 ;; @@
-(ns pencil-factory
+(ns simple-hmm
   (:require [gorilla-plot.core :as plot]
             [clojure.core.matrix :as m])
   (:use clojure.repl
@@ -28,7 +28,7 @@
 (def transition-matrix (m/reshape (into [] (map read-string (split (slurp "worksheets/simple-hmm-transitions.txt") #"\s+"))) [3 3]))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/transition-matrix</span>","value":"#'pencil-factory/transition-matrix"}
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;simple-hmm/transition-matrix</span>","value":"#'simple-hmm/transition-matrix"}
 ;; <=
 
 ;; **
@@ -56,7 +56,7 @@
   (discrete (get transition-matrix s)))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/transition-model</span>","value":"#'pencil-factory/transition-model"}
+;;; {"type":"html","content":"<span class='clj-var'>#&#x27;simple-hmm/transition-model</span>","value":"#'simple-hmm/transition-model"}
 ;; <=
 
 ;; **
@@ -83,5 +83,9 @@
 (take 3 (map :s (map get-predicts (doquery :smc simple-hmm [initial-model transition-model emission-model observations] :number-of-particles 1000))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"}],"value":"((2 2 2 2) (2 2 2 2) (2 2 2 2))"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(2 2 2 2)"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"},{"type":"html","content":"<span class='clj-long'>0</span>","value":"0"},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(1 0 1 2)"},{"type":"list-like","open":"<span class='clj-list'>(</span>","close":"<span class='clj-list'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"},{"type":"html","content":"<span class='clj-long'>1</span>","value":"1"},{"type":"html","content":"<span class='clj-long'>2</span>","value":"2"}],"value":"(1 2 1 2)"}],"value":"((2 2 2 2) (1 0 1 2) (1 2 1 2))"}
 ;; <=
+
+;; @@
+
+;; @@
