@@ -7,6 +7,6 @@
                  [org.clojure/data.csv "0.1.2"]
                  [clj-auto-diff "0.1.3"]
                  [anglican "0.8.0"]]
-  :plugins [[lein-gorilla "0.3.4"]]
+  :plugins [[lein-gorilla "0.3.6"]]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
