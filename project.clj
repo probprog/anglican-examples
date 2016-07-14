@@ -3,7 +3,7 @@
   :url "http://www.robots.ox.ac.uk/~fwood/anglican/"
   :license {:name "GNU General Public License Version 3; Other commercial licenses available."
             :url "http://www.gnu.org/licenses/gpl.html"}
-  :dependencies [[org.clojure/clojure "1.6.0"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/data.csv "0.1.3"]
                  [clj-auto-diff "0.1.3"]
                  [anglican "0.9.0"]]
