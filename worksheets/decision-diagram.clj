@@ -80,7 +80,7 @@
         
         utilities {:drill     (utility-fn :drill     well-state) 
                    :dontdrill (utility-fn :dontdrill well-state)}]
-    (predict :utilities utilities)))
+     utilities))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;drill-or-not/drill-or-not-no-sounding</span>","value":"#'drill-or-not/drill-or-not-no-sounding"}
@@ -107,8 +107,7 @@
 (defn draw-samples 
   [query N & args] 
   (->> (repeatedly N 
-                   #(sample ((conditional query :lmh) utilitym args)))
-                           (map :utilities)))  
+                   #(sample* ((conditional query :lmh) utilitym args)))))  
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;drill-or-not/draw-samples</span>","value":"#'drill-or-not/draw-samples"}
@@ -122,7 +121,7 @@
 (expected-utility (draw-samples drill-or-not-no-sounding 5000))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>20.696</span>","value":"20.696"}],"value":"[:drill 20.696]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 20.696, :dontdrill 0.0}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>18.404</span>","value":"18.404"}],"value":"[:drill 18.404]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 18.404, :dontdrill 0.0}"}
 ;; <=
 
 ;; **
@@ -158,7 +157,7 @@
                                    :dontdrill (utility-fn :dontdrill 
                                                           well-state)}]
     (observe sounding-dist :diffuse)
-    (predict :utilities utilities)))
+    utilities))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;drill-or-not/drill-or-not-with-sounding-no-arg</span>","value":"#'drill-or-not/drill-or-not-with-sounding-no-arg"}
@@ -168,7 +167,7 @@
 (expected-utility (draw-samples drill-or-not-with-sounding-no-arg 5000))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-25.768</span>","value":"-25.768"}],"value":"[:drill -25.768]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -25.768, :dontdrill 0.0}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-25.126</span>","value":"-25.126"}],"value":"[:drill -25.126]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -25.126, :dontdrill 0.0}"}
 ;; <=
 
 ;; **
@@ -201,7 +200,7 @@
                                    :dontdrill (utility-fn :dontdrill 
                                                           well-state)}]
     (observe sounding-dist (first sounding))
-    (predict :utilities utilities)))
+    utilities))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;drill-or-not/drill-or-not-with-sounding</span>","value":"#'drill-or-not/drill-or-not-with-sounding"}
@@ -215,7 +214,7 @@
 (expected-utility (draw-samples drill-or-not-with-sounding 5000 :diffuse))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-27.622</span>","value":"-27.622"}],"value":"[:drill -27.622]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -27.622, :dontdrill 0.0}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-27.07</span>","value":"-27.07"}],"value":"[:drill -27.07]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -27.07, :dontdrill 0.0}"}
 ;; <=
 
 ;; **
@@ -226,7 +225,7 @@
 (map #(expected-utility (draw-samples drill-or-not-with-sounding 5000 %)) [:diffuse :open :closed])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-26.152</span>","value":"-26.152"}],"value":"[:drill -26.152]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -26.152, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>30.8</span>","value":"30.8"}],"value":"[:drill 30.8]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 30.8, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>75.32</span>","value":"75.32"}],"value":"[:drill 75.32]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 75.32, :dontdrill 0.0}"}],"value":"({:drill -26.152, :dontdrill 0.0} {:drill 30.8, :dontdrill 0.0} {:drill 75.32, :dontdrill 0.0})"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>-27.022</span>","value":"-27.022"}],"value":"[:drill -27.022]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -27.022, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>28.874</span>","value":"28.874"}],"value":"[:drill 28.874]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 28.874, :dontdrill 0.0}"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-unkown'>73.556</span>","value":"73.556"}],"value":"[:drill 73.556]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-unkown'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 73.556, :dontdrill 0.0}"}],"value":"({:drill -27.022, :dontdrill 0.0} {:drill 28.874, :dontdrill 0.0} {:drill 73.556, :dontdrill 0.0})"}
 ;; <=
 
 ;; **
@@ -255,7 +254,7 @@
                                         :open 0.4 
                                         :closed 0.5}))]
     (observe sounding-dist sounding)
-    (predict :well-state well-state)))
+    well-state))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;drill-or-not/well-state</span>","value":"#'drill-or-not/well-state"}
@@ -292,7 +291,7 @@
                 :number-of-particles 100)
      (take N)
      (map #(vector 
-             (:well-state (get-predicts %)) 
+             (:result %)
              (:log-weight %)))
      (stat/empirical-distribution)))
 
@@ -324,7 +323,7 @@
 (map (partial expected-utility N [:drill :dontdrill]) [:diffuse :open :closed])
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>-28.575999999996732</span>","value":"-28.575999999996732"}],"value":"[:drill -28.575999999996732]"}],"value":"{:dontdrill 0.0, :drill -28.575999999996732}"}],"value":"[:diffuse {:dontdrill 0.0, :drill -28.575999999996732}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>33.464000000000574</span>","value":"33.464000000000574"}],"value":"[:drill 33.464000000000574]"}],"value":"{:dontdrill 0.0, :drill 33.464000000000574}"}],"value":"[:open {:dontdrill 0.0, :drill 33.464000000000574}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>86.88199999999566</span>","value":"86.88199999999566"}],"value":"[:drill 86.88199999999566]"}],"value":"{:dontdrill 0.0, :drill 86.88199999999566}"}],"value":"[:closed {:dontdrill 0.0, :drill 86.88199999999566}]"}],"value":"([:diffuse {:dontdrill 0.0, :drill -28.575999999996732}] [:open {:dontdrill 0.0, :drill 33.464000000000574}] [:closed {:dontdrill 0.0, :drill 86.88199999999566}])"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>-28.75599999999671</span>","value":"-28.75599999999671"}],"value":"[:drill -28.75599999999671]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill -28.75599999999671, :dontdrill 0.0}"}],"value":"[:diffuse {:drill -28.75599999999671, :dontdrill 0.0}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>31.74800000000064</span>","value":"31.74800000000064"}],"value":"[:drill 31.74800000000064]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 31.74800000000064, :dontdrill 0.0}"}],"value":"[:open {:drill 31.74800000000064, :dontdrill 0.0}]"},{"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"},{"type":"html","content":"<span class='clj-double'>88.08799999999538</span>","value":"88.08799999999538"}],"value":"[:drill 88.08799999999538]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"},{"type":"html","content":"<span class='clj-double'>0.0</span>","value":"0.0"}],"value":"[:dontdrill 0.0]"}],"value":"{:drill 88.08799999999538, :dontdrill 0.0}"}],"value":"[:closed {:drill 88.08799999999538, :dontdrill 0.0}]"}],"value":"([:diffuse {:drill -28.75599999999671, :dontdrill 0.0}] [:open {:drill 31.74800000000064, :dontdrill 0.0}] [:closed {:drill 88.08799999999538, :dontdrill 0.0}])"}
 ;; <=
 
 ;; **
@@ -353,7 +352,7 @@
                       #(expected-utility N %1 %2))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"}],"value":"[:open :drill]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"}],"value":"[:diffuse :dontdrill]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"}],"value":"[:closed :drill]"}],"value":"{:open :drill, :diffuse :dontdrill, :closed :drill}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:closed</span>","value":":closed"},{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"}],"value":"[:closed :drill]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:diffuse</span>","value":":diffuse"},{"type":"html","content":"<span class='clj-keyword'>:dontdrill</span>","value":":dontdrill"}],"value":"[:diffuse :dontdrill]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:open</span>","value":":open"},{"type":"html","content":"<span class='clj-keyword'>:drill</span>","value":":drill"}],"value":"[:open :drill]"}],"value":"{:closed :drill, :diffuse :dontdrill, :open :drill}"}
 ;; <=
 
 ;; **
