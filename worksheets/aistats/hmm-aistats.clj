@@ -41,9 +41,12 @@
 
 ;; @@
 (defquery hmm
+  "takes observation sequence and
+  known initial state, transition,
+  and observation distributions and
+  returns posterior samples of the 
+  joint latent state sequence"
   [observations init-dist trans-dists obs-dists]
-  (predict
-    :states
     (reduce 
       (fn [states obs]
         (let [state (sample (get trans-dists
@@ -51,7 +54,7 @@
           (observe (get obs-dists state) obs)
           (conj states state)))
       [(sample init-dist)]
-      observations)))
+      observations))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/hmm</span>","value":"#'hmm-aistats/hmm"}
@@ -132,7 +135,7 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 2617.74259 msecs&quot;
+;;; &quot;Elapsed time: 3309.202753 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
@@ -151,7 +154,7 @@
           (->> ;; use first n samples
                (take n samples)
                ;; calculate L2 error of empirical posterior relative to true posterior
-               (collect-by (comp index->ind :states))
+               (collect-by (comp index->ind :result))
                s/empirical-mean
                (s/l2-norm posterior)))
         num-sample-range))
@@ -170,5 +173,5 @@
                 :y-title "log L2 error")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"titleOffset":30,"title":"log number of samples","scale":"x","type":"x"},{"titleOffset":45,"title":"log L2 error","scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"216ab3ba-a21a-4689-9ebe-d67cc6d385eb","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"216ab3ba-a21a-4689-9ebe-d67cc6d385eb","field":"data.y"}}],"marks":[{"type":"line","from":{"data":"216ab3ba-a21a-4689-9ebe-d67cc6d385eb"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"data":[{"name":"216ab3ba-a21a-4689-9ebe-d67cc6d385eb","values":[{"x":2.0,"y":-0.6236249273078712},{"x":2.301029995663981,"y":-0.6313219798655224},{"x":2.6989700043360183,"y":-1.2683162483194452},{"x":2.9999999999999996,"y":-1.4300249326964922},{"x":3.301029995663981,"y":-1.7044010596746382},{"x":3.6989700043360187,"y":-1.9642722523031735},{"x":4.0,"y":-2.15507747524541}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":40,"top":10,"right":10,"left":55}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:titleOffset 30, :title \"log number of samples\", :scale \"x\", :type \"x\"} {:titleOffset 45, :title \"log L2 error\", :scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"216ab3ba-a21a-4689-9ebe-d67cc6d385eb\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"216ab3ba-a21a-4689-9ebe-d67cc6d385eb\", :field \"data.y\"}}], :marks [{:type \"line\", :from {:data \"216ab3ba-a21a-4689-9ebe-d67cc6d385eb\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :data [{:name \"216ab3ba-a21a-4689-9ebe-d67cc6d385eb\", :values ({:x 2.0, :y -0.6236249273078712} {:x 2.301029995663981, :y -0.6313219798655224} {:x 2.6989700043360183, :y -1.2683162483194452} {:x 2.9999999999999996, :y -1.4300249326964922} {:x 3.301029995663981, :y -1.7044010596746382} {:x 3.6989700043360187, :y -1.9642722523031735} {:x 4.0, :y -2.15507747524541})}], :width 400, :height 247.2188, :padding {:bottom 40, :top 10, :right 10, :left 55}}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"33ab7f8c-a711-4519-92b2-15a43f3f2c94","values":[{"x":2.0,"y":-0.19595780733497573},{"x":2.301029995663981,"y":-0.690479718720879},{"x":2.6989700043360183,"y":-1.0003884763905315},{"x":2.9999999999999996,"y":-1.2639543421549126},{"x":3.301029995663981,"y":-1.7438473388864832},{"x":3.6989700043360187,"y":-2.0807099165274265},{"x":4.0,"y":-2.4515043293933334}]}],"marks":[{"type":"line","from":{"data":"33ab7f8c-a711-4519-92b2-15a43f3f2c94"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"33ab7f8c-a711-4519-92b2-15a43f3f2c94","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"33ab7f8c-a711-4519-92b2-15a43f3f2c94","field":"data.y"}}],"axes":[{"type":"x","scale":"x","title":"log number of samples","titleOffset":30},{"type":"y","scale":"y","title":"log L2 error","titleOffset":45}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"33ab7f8c-a711-4519-92b2-15a43f3f2c94\", :values ({:x 2.0, :y -0.19595780733497573} {:x 2.301029995663981, :y -0.690479718720879} {:x 2.6989700043360183, :y -1.0003884763905315} {:x 2.9999999999999996, :y -1.2639543421549126} {:x 3.301029995663981, :y -1.7438473388864832} {:x 3.6989700043360187, :y -2.0807099165274265} {:x 4.0, :y -2.4515043293933334})}], :marks [{:type \"line\", :from {:data \"33ab7f8c-a711-4519-92b2-15a43f3f2c94\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"33ab7f8c-a711-4519-92b2-15a43f3f2c94\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"33ab7f8c-a711-4519-92b2-15a43f3f2c94\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\", :title \"log number of samples\", :titleOffset 30} {:type \"y\", :scale \"y\", :title \"log L2 error\", :titleOffset 45}]}}"}
 ;; <=
