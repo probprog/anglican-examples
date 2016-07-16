@@ -55,7 +55,7 @@
     "a simple pencil factory"
      (let [p (sample (uniform-continuous 0 1))]
            (observe (flip p) false)
-           (predict :p p)))
+            p))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/run-pencil-factory</span>","value":"#'pencil-factory/run-pencil-factory"}
@@ -67,7 +67,7 @@
 
 ;; @@
 (def sampler (doquery :smc run-pencil-factory nil :number-of-particles 100))
-(def samples (take 10000 (map :p (map get-predicts sampler))))
+(def samples (take 10000 (map :result sampler)))
 (plot/histogram samples)
 
 
@@ -75,7 +75,7 @@
  (float (stat/variance samples))]
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33249813</span>","value":"0.33249813"},{"type":"html","content":"<span class='clj-unkown'>0.05498733</span>","value":"0.05498733"}],"value":"[0.33249813 0.05498733]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33364207</span>","value":"0.33364207"},{"type":"html","content":"<span class='clj-unkown'>0.055894837</span>","value":"0.055894837"}],"value":"[0.33364207 0.055894837]"}
 ;; <=
 
 ;; **
@@ -137,7 +137,7 @@
     "a simple pencil factory"
      (let [p (sample (beta a b))]
            (observe (binomial n p) k)
-           (predict :p p)))
+           p))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/run-pencil-factory</span>","value":"#'pencil-factory/run-pencil-factory"}
@@ -153,8 +153,12 @@
 (def n 7)
 (def k 0)
 
-(def sampler (doquery :smc run-pencil-factory [a b n k] :number-of-particles 1000))
-(def samples (take 10000 (map :p (map get-predicts sampler))))
+(def sampler 
+  (doquery :smc 
+           run-pencil-factory 
+           [a b n k] 
+           :number-of-particles 1000))
+(def samples (take 10000 (map :result sampler)))
 (plot/histogram samples)
 
 
@@ -178,36 +182,26 @@
 (defquery run-pencil-factory [n k]
     "a simple pencil factory"
      (let [z (sample (exponential 2))
-           p (min z 0.99999999)]
-       ;(cond (= p 1) (observe (flip 1) (= n k))
-       ;      (= p 0) (observe (flip 1) (= k 0))
-       ;      :else (observe (binomial n p) k))
+           p (min z 1)]
        (observe (binomial n p) k)
-       (predict :p p)))
+       p))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pencil-factory/run-pencil-factory</span>","value":"#'pencil-factory/run-pencil-factory"}
 ;; <=
-
-;; **
-;;; Notice the hack we introduce to take care of the cases p=0 and p=1. This is because the implementation of the binomial distribution we use cannot handle these cases.
-;; **
 
 ;; @@
 (def n 10)
 (def k 3)
 
 (def sampler (doquery :smc run-pencil-factory [n k] :number-of-particles 1000))
-(def samples (take 10000 (map :p (map get-predicts sampler))))
+(def samples (take 10000 (map :result sampler)))
 (plot/histogram samples)
 
 
 [(float (stat/mean samples))
  (float (stat/variance samples))]
-
-[(float (exp-beta-pos 1 1 n k ))
- (float (var-beta-pos 1 1 n k))]
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33333334</span>","value":"0.33333334"},{"type":"html","content":"<span class='clj-unkown'>0.017094018</span>","value":"0.017094018"}],"value":"[0.33333334 0.017094018]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.29800865</span>","value":"0.29800865"},{"type":"html","content":"<span class='clj-unkown'>0.015674768</span>","value":"0.015674768"}],"value":"[0.29800865 0.015674768]"}
 ;; <=
