@@ -47,11 +47,11 @@
 
 ;; @@
 (defdist location [pub-preference] []
-  (sample [this] (if (sample (flip pub-preference)) :pub :starbucks))
-  (observe [this value] (observe (flip pub-preference) (= value :pub))))
+  (sample* [this] (if (sample* (flip pub-preference)) :pub :starbucks))
+  (observe* [this value] (observe* (flip pub-preference) (= value :pub))))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-unkown'>#&lt;MultiFn clojure.lang.MultiFn@2d4cca52&gt;</span>","value":"#<MultiFn clojure.lang.MultiFn@2d4cca52>"}
+;;; {"type":"html","content":"<span class='clj-unkown'>#multifn[print-method 0x6a9f7e46]</span>","value":"#multifn[print-method 0x6a9f7e46]"}
 ;; <=
 
 ;; **
@@ -59,10 +59,10 @@
 ;; **
 
 ;; @@
-(repeatedly 10 #(sample (location 0.6)))
+(repeatedly 10 #(sample* (location 0.6)))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"(:starbucks :starbucks :pub :pub :starbucks :pub :starbucks :starbucks :pub :pub)"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"(:pub :starbucks :starbucks :pub :pub :pub :pub :starbucks :pub :starbucks)"}
 ;; <=
 
 ;; **
@@ -76,20 +76,20 @@
   (defquery meet-by-chance []
     (let [amy-location (sample (location 0.6))
           bob-location (sample (location 0.6))]
-      (predict :amy amy-location)
-      (predict :meet (= amy-location bob-location)))))
+      {:amy amy-location
+       :meet (= amy-location bob-location)})))
 
 (println "p(Amy at pub) ="
   (stat/mean (map #(if (= (:amy %) :pub) 1.0 0.0)
-                (repeatedly 1000 #(sample ((conditional meet-by-chance)))))))
+                (repeatedly 1000 #(sample* ((conditional meet-by-chance)))))))
 
 (println "p(Both at same location) ="
   (stat/mean (map #(if (:meet %) 1.0 0.0) 
-                (repeatedly 1000 #(sample ((conditional meet-by-chance)))))))
+                (repeatedly 1000 #(sample* ((conditional meet-by-chance)))))))
 ;; @@
 ;; ->
-;;; p(Amy at pub) = 0.595
-;;; p(Both at same location) = 0.486
+;;; p(Amy at pub) = 0.592
+;;; p(Both at same location) = 0.525
 ;;; 
 ;; <-
 ;; =>
@@ -117,12 +117,12 @@
     (let [amy-location (sample (location 0.6))
           bob-location (sample (location 0.6))]
       (observe (flip 1.0) (= amy-location bob-location))
-      (predict :location amy-location))))
+      amy-location)))
 
-(frequencies (repeatedly 1000 #(sample ((conditional meet-at-pub-inefficient)))))
+(frequencies (repeatedly 1000 #(sample* ((conditional meet-at-pub-inefficient)))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"[:location :pub]"}],"value":"{:location :pub}"},{"type":"html","content":"<span class='clj-long'>667</span>","value":"667"}],"value":"[{:location :pub} 667]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"[:location :starbucks]"}],"value":"{:location :starbucks}"},{"type":"html","content":"<span class='clj-long'>333</span>","value":"333"}],"value":"[{:location :starbucks} 333]"}],"value":"{{:location :pub} 667, {:location :starbucks} 333}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-long'>631</span>","value":"631"}],"value":"[:pub 631]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-long'>369</span>","value":"369"}],"value":"[:starbucks 369]"}],"value":"{:pub 631, :starbucks 369}"}
 ;; <=
 
 ;; **
@@ -139,12 +139,12 @@
     (let [amy-location (sample (location 0.6))
           bob-location-dist (location 0.6)]
       (observe bob-location-dist amy-location)
-      (predict :location amy-location))))
+      amy-location)))
 
-(frequencies (repeatedly 1000 #(sample ((conditional meet-at-pub-efficient)))))
+(frequencies (repeatedly 1000 #(sample* ((conditional meet-at-pub-efficient)))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"[:location :pub]"}],"value":"{:location :pub}"},{"type":"html","content":"<span class='clj-long'>681</span>","value":"681"}],"value":"[{:location :pub} 681]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:location</span>","value":":location"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"[:location :starbucks]"}],"value":"{:location :starbucks}"},{"type":"html","content":"<span class='clj-long'>319</span>","value":"319"}],"value":"[{:location :starbucks} 319]"}],"value":"{{:location :pub} 681, {:location :starbucks} 319}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-long'>310</span>","value":"310"}],"value":"[:starbucks 310]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-long'>690</span>","value":"690"}],"value":"[:pub 690]"}],"value":"{:starbucks 310, :pub 690}"}
 ;; <=
 
 ;; **
@@ -208,14 +208,15 @@
 ;; @@
 (defn coordinate [meta-reasoning-depth]
   (let [N 1000
-        amy-dist ((conditional (query [depth] (predict :amy (amy depth))) :lmh) meta-reasoning-depth)
-        bob-dist ((conditional (query [depth] (predict :bob (bob depth))) :lmh) meta-reasoning-depth)
-        amy-samples (repeatedly N #(sample amy-dist))
-        bob-samples (repeatedly N #(sample bob-dist))
+        amy-dist ((conditional (query [depth] (amy depth)) :lmh) meta-reasoning-depth)
+        bob-dist ((conditional (query [depth] (bob depth)) :lmh) meta-reasoning-depth)
+        amy-samples (repeatedly N #(sample* amy-dist))
+        bob-samples (repeatedly N #(sample* bob-dist))
+        _ (prn (take 5 amy-samples))
         pub-probability (fn [outcomes] (/ (count (filter #(= :pub %) outcomes)) (float N)))]
     (println "recursion depth: " meta-reasoning-depth)
-    (println "p(Amy at pub): " (pub-probability (map :amy amy-samples)))
-    (println "p(Bob at pub): " (pub-probability (map :bob bob-samples)))))
+    (println "p(Amy at pub): " (pub-probability  amy-samples))
+    (println "p(Bob at pub): " (pub-probability  bob-samples))))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;coordination-game/coordinate</span>","value":"#'coordination-game/coordinate"}
@@ -231,9 +232,10 @@
 (coordinate depth)
 ;; @@
 ;; ->
+;;; (:pub :pub :pub :pub :pub)
 ;;; recursion depth:  0
-;;; p(Amy at pub):  0.704
-;;; p(Bob at pub):  0.59
+;;; p(Amy at pub):  0.695
+;;; p(Bob at pub):  0.618
 ;;; 
 ;; <-
 ;; =>
@@ -250,9 +252,10 @@
 (coordinate depth)
 ;; @@
 ;; ->
+;;; (:starbucks :starbucks :starbucks :starbucks :starbucks)
 ;;; recursion depth:  1
-;;; p(Amy at pub):  0.67
-;;; p(Bob at pub):  0.789
+;;; p(Amy at pub):  0.698
+;;; p(Bob at pub):  0.785
 ;;; 
 ;; <-
 ;; =>
@@ -272,12 +275,14 @@
 (coordinate depth)
 ;; @@
 ;; ->
+;;; (:pub :pub :pub :pub :pub)
 ;;; recursion depth:  2
-;;; p(Amy at pub):  0.809
-;;; p(Bob at pub):  0.872
+;;; p(Amy at pub):  0.826
+;;; p(Bob at pub):  0.863
+;;; (:pub :pub :pub :pub :pub)
 ;;; recursion depth:  3
 ;;; p(Amy at pub):  0.929
-;;; p(Bob at pub):  0.953
+;;; p(Bob at pub):  0.965
 ;;; 
 ;; <-
 ;; =>
@@ -331,14 +336,14 @@
 ;; @@
 (defn coordinate-false-belief [meta-reasoning-depth]
   (let [N 1000
-        amy-dist ((conditional (query [depth] (predict :amy (amy-true-model depth))) :lmh) meta-reasoning-depth)
-        bob-dist ((conditional (query [depth] (predict :bob (bob-confused depth))) :lmh) meta-reasoning-depth)
-        amy-samples (repeatedly N #(sample amy-dist))
-        bob-samples (repeatedly N #(sample bob-dist))
+        amy-dist ((conditional (query [depth]  (amy-true-model depth)) :lmh) meta-reasoning-depth)
+        bob-dist ((conditional (query [depth]  (bob-confused depth)) :lmh) meta-reasoning-depth)
+        amy-samples (repeatedly N #(sample* amy-dist))
+        bob-samples (repeatedly N #(sample* bob-dist))
         pub-probability (fn [outcomes] (/ (count (filter #(= :pub %) outcomes)) (float N)))]
     (println "recursion depth: " meta-reasoning-depth)
-    (println "p(Amy at pub): " (pub-probability (map :amy amy-samples)))
-    (println "p(Bob at pub): " (pub-probability (map :bob bob-samples)))))
+    (println "p(Amy at pub): " (pub-probability amy-samples))
+    (println "p(Bob at pub): " (pub-probability bob-samples))))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;coordination-game/coordinate-false-belief</span>","value":"#'coordination-game/coordinate-false-belief"}
@@ -356,17 +361,17 @@
 ;; @@
 ;; ->
 ;;; recursion depth:  0
-;;; p(Amy at pub):  0.501
-;;; p(Bob at pub):  0.615
+;;; p(Amy at pub):  0.502
+;;; p(Bob at pub):  0.597
 ;;; recursion depth:  1
-;;; p(Amy at pub):  0.493
-;;; p(Bob at pub):  0.817
+;;; p(Amy at pub):  0.476
+;;; p(Bob at pub):  0.783
 ;;; recursion depth:  2
-;;; p(Amy at pub):  0.297
-;;; p(Bob at pub):  0.892
+;;; p(Amy at pub):  0.305
+;;; p(Bob at pub):  0.875
 ;;; recursion depth:  3
-;;; p(Amy at pub):  0.177
-;;; p(Bob at pub):  0.937
+;;; p(Amy at pub):  0.166
+;;; p(Bob at pub):  0.943
 ;;; 
 ;; <-
 ;; =>
