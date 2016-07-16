@@ -29,7 +29,7 @@
   ([] (even 0)) 
   ([state]
    (if (= state 0)
-     (let [ret (if (sample (flip 0.6)) \a \b)]
+     (let [ret (if (sample* (flip 0.6)) \a \b)]
        (if (= ret \a)
              ; if in 0 and a is emitted then stay in 0
              (cons \a (lazy-seq (even 0)))    
@@ -52,7 +52,7 @@
 (reduce str (take 200 (even)))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-string'>&quot;bbbbaaaaaaabbbbbbabbabbabbbbabbaabbbbbbbbbbbbbbabbaaaaaabbabbabbbbaabbbbaaaabbabbbbaaabbaabbbbabbbbaabbaaaabbabbbbbbbbaaaaaaaaaabbabbaaabbaabbaaaaabbaaabbbbbbbbbbbbaaabbabbaabbaaaaabbbbabbbbbbaaaaabbb&quot;</span>","value":"\"bbbbaaaaaaabbbbbbabbabbabbbbabbaabbbbbbbbbbbbbbabbaaaaaabbabbabbbbaabbbbaaaabbabbbbaaabbaabbbbabbbbaabbaaaabbabbbbbbbbaaaaaaaaaabbabbaaabbaabbaaaaabbaaabbbbbbbbbbbbaaabbabbaabbaaaaabbbbabbbbbbaaaaabbb\""}
+;;; {"type":"html","content":"<span class='clj-string'>&quot;bbbbbbbbabbabbaaabbaaabbabbaaaaaabbaaabbabbaaabbbbbbabbaaabbbbbbbbbbabbbbbbbbbbabbaabbabbbbabbbbaaaaaaaaabbabbabbaaaabbabbaaaaabbaabbabbbbabbbbbbaabbabbabbbbabbabbbbbbaaabbabbbbaaabbbbaaabbbbbbabbaaaa&quot;</span>","value":"\"bbbbbbbbabbabbaaabbaaabbabbaaaaaabbaaabbabbaaabbbbbbabbaaabbbbbbbbbbabbbbbbbbbbabbaabbabbbbabbbbaaaaaaaaabbabbabbaaaabbabbaaaaabbaabbabbbbabbbbbbaabbabbabbbbabbabbbbbbaaabbabbbbaaabbbbaaabbbbbbabbaaaa\""}
 ;; <=
 
 ;; **
@@ -126,7 +126,7 @@
                 (state-symbol->next-state state symbol))
               0 data)
 
-      (predict :words (join (sample-words 0))))))
+      (join (sample-words 0)))))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;pdia/pdia</span>","value":"#'pdia/pdia"}
@@ -139,9 +139,8 @@
 ;; @@
 (def t (->> (doquery :pimh pdia 1000 :number-of-particles 1000)
             (filter #(not (= Double/NEGATIVE_INFINITY (:log-weight %))))
-            (map get-predicts)
             (take 1000)
-            (map :words)
+            (map :result)
             (filter #(not (nil? (fraction-even %))))
             doall))
             
@@ -158,7 +157,7 @@
 (take-nth 20 t)
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;bbabbbbaaaaaaabbaabbaaabbabbbbbbbbaaabbbbaaa&quot;</span>","value":"\"bbabbbbaaaaaaabbaabbaaabbabbbbbbbbaaabbbbaaa\""},{"type":"html","content":"<span class='clj-string'>&quot;bbaabbaaab&quot;</span>","value":"\"bbaabbaaab\""},{"type":"html","content":"<span class='clj-string'>&quot;bbaabbabbbbabbaabbaaaaaaabb&quot;</span>","value":"\"bbaabbabbbbabbaabbaaaaaaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbabbbbaaaaaaaaaaaaabbaa&quot;</span>","value":"\"abbabbbbaaaaaaaaaaaaabbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;aaaaabbbbbbaabbaabbabb&quot;</span>","value":"\"aaaaabbbbbbaabbaabbabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbabbaabbaaabbbbaa&quot;</span>","value":"\"aabbabbaabbaaabbbbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;bbabb&quot;</span>","value":"\"bbabb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbbbbba&quot;</span>","value":"\"bbbbbba\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbaa&quot;</span>","value":"\"aabbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;aaaaaaabbabbb&quot;</span>","value":"\"aaaaaaabbabbb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbabbabbaaabbbbabbaaaaabbbbbbabbb&quot;</span>","value":"\"abbabbabbaaabbbbabbaaaaabbbbbbabbb\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbabbaaabbabbabb&quot;</span>","value":"\"aabbabbaaabbabbabb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbaaaaaaabbbbaaabbaaabbbabbbabbbbaabb&quot;</span>","value":"\"bbaaaaaaabbbbaaabbaaabbbabbbabbbbaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbaaaabbaaaaabbabbbbabbbb&quot;</span>","value":"\"aabbaaaabbaaaaabbabbbbabbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbaabb&quot;</span>","value":"\"bbaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbaaaabbaa&quot;</span>","value":"\"aabbaaaabbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;bbabbaaabba&quot;</span>","value":"\"bbabbaaabba\""},{"type":"html","content":"<span class='clj-string'>&quot;aaabbaaaaabb&quot;</span>","value":"\"aaabbaaaaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aaabbabbabba&quot;</span>","value":"\"aaabbabbabba\""},{"type":"html","content":"<span class='clj-string'>&quot;aaabbabbabbaaabb&quot;</span>","value":"\"aaabbabbabbaaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbbbbbbbabbaabbaabbabbaaabbbbabba&quot;</span>","value":"\"abbbbbbbbabbaabbaabbabbaaabbbbabba\""},{"type":"html","content":"<span class='clj-string'>&quot;aaaaaaaabbaaaaaaaaabbbbabbbbbbaaaabbbbabbbbb&quot;</span>","value":"\"aaaaaaaabbaaaaaaaaabbbbabbbbbbaaaabbbbabbbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbabbaaabbaabbbbaaaaaaaaaabb&quot;</span>","value":"\"abbabbaaabbaabbbbaaaaaaaaaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aaabbaabbbb&quot;</span>","value":"\"aaabbaabbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbabbaaaa&quot;</span>","value":"\"bbabbaaaa\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbbbaabbb&quot;</span>","value":"\"aabbbbaabbb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbabbaabbab&quot;</span>","value":"\"abbabbaabbab\""},{"type":"html","content":"<span class='clj-string'>&quot;abbbbaaaaabbbba&quot;</span>","value":"\"abbbbaaaaabbbba\""},{"type":"html","content":"<span class='clj-string'>&quot;bbab&quot;</span>","value":"\"bbab\""}],"value":"(\"bbabbbbaaaaaaabbaabbaaabbabbbbbbbbaaabbbbaaa\" \"bbaabbaaab\" \"bbaabbabbbbabbaabbaaaaaaabb\" \"abbabbbbaaaaaaaaaaaaabbaa\" \"aaaaabbbbbbaabbaabbabb\" \"aabbabbaabbaaabbbbaa\" \"bbabb\" \"bbbbbba\" \"aabbaa\" \"aaaaaaabbabbb\" \"abbabbabbaaabbbbabbaaaaabbbbbbabbb\" \"aabbabbaaabbabbabb\" \"bbaaaaaaabbbbaaabbaaabbbabbbabbbbaabb\" \"aabbaaaabbaaaaabbabbbbabbbb\" \"bbaabb\" \"aabbaaaabbaa\" \"bbabbaaabba\" \"aaabbaaaaabb\" \"aaabbabbabba\" \"aaabbabbabbaaabb\" \"abbbbbbbbabbaabbaabbabbaaabbbbabba\" \"aaaaaaaabbaaaaaaaaabbbbabbbbbbaaaabbbbabbbbb\" \"abbabbaaabbaabbbbaaaaaaaaaabb\" \"aaabbaabbbb\" \"bbabbaaaa\" \"aabbbbaabbb\" \"abbabbaabbab\" \"abbbbaaaaabbbba\" \"bbab\")"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-string'>&quot;aaaaaaabbab&quot;</span>","value":"\"aaaaaaabbab\""},{"type":"html","content":"<span class='clj-string'>&quot;abbbbaaaabbaaabbaaaaabbaaa&quot;</span>","value":"\"abbbbaaaabbaaabbaaaaabbaaa\""},{"type":"html","content":"<span class='clj-string'>&quot;abbabbaabbbbbb&quot;</span>","value":"\"abbabbaabbbbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbbbbbbbaabbb&quot;</span>","value":"\"bbbbbbbbaabbb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbaaaaabbabbbbabbaa&quot;</span>","value":"\"abbaaaaabbabbbbabbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;bbbbaaaabbaaabbbba&quot;</span>","value":"\"bbbbaaaabbaaabbbba\""},{"type":"html","content":"<span class='clj-string'>&quot;aaaabbaa&quot;</span>","value":"\"aaaabbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;abbaabbab&quot;</span>","value":"\"abbaabbab\""},{"type":"html","content":"<span class='clj-string'>&quot;bba&quot;</span>","value":"\"bba\""},{"type":"html","content":"<span class='clj-string'>&quot;abbbba&quot;</span>","value":"\"abbbba\""},{"type":"html","content":"<span class='clj-string'>&quot;abba&quot;</span>","value":"\"abba\""},{"type":"html","content":"<span class='clj-string'>&quot;abbaabbbb&quot;</span>","value":"\"abbaabbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbaaabbaaaabbbbbbaa&quot;</span>","value":"\"bbaaabbaaaabbbbbbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;abba&quot;</span>","value":"\"abba\""},{"type":"html","content":"<span class='clj-string'>&quot;bbabbbbb&quot;</span>","value":"\"bbabbbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;bbbbbbbbbbaaabbab&quot;</span>","value":"\"bbbbbbbbbbaaabbab\""},{"type":"html","content":"<span class='clj-string'>&quot;aaaabbabbabbaabb&quot;</span>","value":"\"aaaabbabbabbaabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbaaabbabbbbaaaaabbbb&quot;</span>","value":"\"aabbaaabbabbbbaaaaabbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbaaaaaaabbabbbbbbbbbbabbabba&quot;</span>","value":"\"abbaaaaaaabbabbbbbbbbbbabbabba\""},{"type":"html","content":"<span class='clj-string'>&quot;bbbbabbaaaaaab&quot;</span>","value":"\"bbbbabbaaaaaab\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbaaabbaaaaabbabbbbbbaabbbbb&quot;</span>","value":"\"aabbaaabbaaaaabbabbbbbbaabbbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;abbabbaabba&quot;</span>","value":"\"abbabbaabba\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbabbbbaaa&quot;</span>","value":"\"aabbabbbbaaa\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbbbbbbbaaabbbbaabbbbbbaa&quot;</span>","value":"\"aabbbbbbbbaaabbbbaabbbbbbaa\""},{"type":"html","content":"<span class='clj-string'>&quot;bbabbbbb&quot;</span>","value":"\"bbabbbbb\""},{"type":"html","content":"<span class='clj-string'>&quot;aaabbbabb&quot;</span>","value":"\"aaabbbabb\""},{"type":"html","content":"<span class='clj-string'>&quot;aabbbbaaabbbbbbbbaabbaaabba&quot;</span>","value":"\"aabbbbaaabbbbbbbbaabbaaabba\""},{"type":"html","content":"<span class='clj-string'>&quot;bbbbaaaaaaaab&quot;</span>","value":"\"bbbbaaaaaaaab\""},{"type":"html","content":"<span class='clj-string'>&quot;bbaa&quot;</span>","value":"\"bbaa\""}],"value":"(\"aaaaaaabbab\" \"abbbbaaaabbaaabbaaaaabbaaa\" \"abbabbaabbbbbb\" \"bbbbbbbbaabbb\" \"abbaaaaabbabbbbabbaa\" \"bbbbaaaabbaaabbbba\" \"aaaabbaa\" \"abbaabbab\" \"bba\" \"abbbba\" \"abba\" \"abbaabbbb\" \"bbaaabbaaaabbbbbbaa\" \"abba\" \"bbabbbbb\" \"bbbbbbbbbbaaabbab\" \"aaaabbabbabbaabb\" \"aabbaaabbabbbbaaaaabbbb\" \"abbaaaaaaabbabbbbbbbbbbabbabba\" \"bbbbabbaaaaaab\" \"aabbaaabbaaaaabbabbbbbbaabbbbb\" \"abbabbaabba\" \"aabbabbbbaaa\" \"aabbbbbbbbaaabbbbaabbbbbbaa\" \"bbabbbbb\" \"aaabbbabb\" \"aabbbbaaabbbbbbbbaabbaaabba\" \"bbbbaaaaaaaab\" \"bbaa\")"}
 ;; <=
 
 ;; **
@@ -173,7 +172,7 @@
 
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-unkown'>0.9844499</span>","value":"0.9844499"}
+;;; {"type":"html","content":"<span class='clj-unkown'>0.9771349</span>","value":"0.9771349"}
 ;; <=
 
 ;; **
@@ -185,13 +184,12 @@
 ;; @@
 (def fraction-even-as-function-of-training-data-length 
   (loop [N 2 purities {}]
-    (if (> N 1500)
+    (if (> N 800)
       purities
       (let [samples (->> (doquery :pimh pdia N :number-of-particles 1000)
                          (filter #(not (= Double/NEGATIVE_INFINITY (:log-weight %))))
-                         (map get-predicts)
                          (take 1000)
-                         (map :words)
+                         (map :result)
                          (filter #(not (nil? (fraction-even %)))))
             fe (if (= 0 (count samples))
                  0
@@ -203,17 +201,16 @@
 ;; @@
 ;; ->
 ;;; {:N 2, :fraction-even 0, :illustrative-samples ()}
-;;; {:N 3, :fraction-even 0.3750248, :illustrative-samples (abbbbbabb bbbbbbabbabbaabbabbabbabbaabbabbabbabbbbabbbbabbabbbbabbbbbbabbaa bbabbabbabb bbbbbabbbbbbbbbbbbbb babbbbbabaaabaaababbbaab)}
-;;; {:N 5, :fraction-even 0.31982574, :illustrative-samples (abbaabbaabbbbabababbbaabbbaababbbaaabbaaababaab aabab baabbaaabaaabb baabaa bbaaabbb)}
-;;; {:N 9, :fraction-even 0.3905417, :illustrative-samples (ba bbbabaabbbabaabbbbba abbabaaabab bbbbbbabbbbb aaaaabaaaaaabbbbbaa)}
-;;; {:N 16, :fraction-even 0.46423975, :illustrative-samples (aabbababbbbbbbbbaabbaabbabbbbbbbbbababbaabbbaababb bbaababbbab abbabbaa babaabbbaabbaa bbabab)}
-;;; {:N 28, :fraction-even 0.52298564, :illustrative-samples (ababbbabaaaaba bbbbbbbaabb bbbbbaabbbbb aaabbba aaaaaaaaaaaaaaaaaaababbabbbb)}
-;;; {:N 50, :fraction-even 0.8436249, :illustrative-samples (aaaaaba aabbaaaaabbaaaaabb bbabbaabbaaaa bbbbaaaaa aabbaaaaaaaaa)}
-;;; {:N 90, :fraction-even 0.73328763, :illustrative-samples (bbbbaabbabbab abbabbaa abba baaabbaabbab baabbabbaab)}
-;;; {:N 162, :fraction-even 0.63419074, :illustrative-samples (abbbbbbabbbba bbbaabbb bbbbbbaabba ba bbbbba)}
-;;; {:N 291, :fraction-even 0.99008685, :illustrative-samples (bbaaaaababbbbaaaaaaaabbaabbbbabbbbabbabbb aaba abbabb abbabbabbbbaaa bbbbaaaaaa)}
-;;; {:N 523, :fraction-even 0.99384326, :illustrative-samples (aabbaaaabbaaaaaa abbabbbbbbbbaaab bbbbbbbbbbaaaabb bbaaaabbb aaaabbbbaabbaaaaaaa)}
-;;; {:N 941, :fraction-even 0.9932153, :illustrative-samples (aabbaa bbbbbbabbbbbbbbaaabbabbaa abbbbabbabbbbb bba abbaabbbbaab)}
+;;; {:N 3, :fraction-even 0, :illustrative-samples ()}
+;;; {:N 5, :fraction-even 0.35032853, :illustrative-samples (abbabbbaabaaabb bbabaaaba bbbbbbaabba bbbaabbaba aaaaaabbbbbbaaa)}
+;;; {:N 9, :fraction-even 0.41151485, :illustrative-samples (abbbabbbaaaabaaabbabbab babaaab bbbaaaaabababa aaaaababbb bababbababa)}
+;;; {:N 16, :fraction-even 0.43661693, :illustrative-samples (aaaabba aabbabbaabbbbabbb abbabbababb bbbab bbaabb)}
+;;; {:N 28, :fraction-even 0.37826568, :illustrative-samples (baaaaaaaaaabbbbbbaabb aabbba bbabbbbbba bbaaabbaaabbbbbbbbbb babb)}
+;;; {:N 50, :fraction-even 0.46403491, :illustrative-samples (babaaaaaabbbbbbaaaa bbbba bba bbabbabbaaaab bbbbbbbbaaa)}
+;;; {:N 90, :fraction-even 0.9214794, :illustrative-samples (aaaaaaaaaaaabbaab bbaaaaaaabbaaaabbaaaab aabbaaa bbabbaa bbbbaaaa)}
+;;; {:N 162, :fraction-even 0.9801726, :illustrative-samples (bbaaaa aabbaaaaaaabb aaaaabba abbabb abbaabbaa)}
+;;; {:N 291, :fraction-even 0.93708295, :illustrative-samples (bbaaabbbbbbaaaa bbabbaabbabb abbbbaa aaaabbabbb bba)}
+;;; {:N 523, :fraction-even 0.96097875, :illustrative-samples (bbabbbbabbbbaaaabbbbbbaaaaabbabbabbaab aaaabbaaaaaaab aabbaa bbbbbbbbbbbbbbbba abba)}
 ;;; 
 ;; <-
 ;; =>
@@ -227,5 +224,9 @@
                 :y-title "Fraction even in output")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"axes":[{"titleOffset":30,"title":"Length of training sequence","scale":"x","type":"x"},{"titleOffset":45,"title":"Fraction even in output","scale":"y","type":"y"}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"eefa83b8-9bdd-4beb-94f3-95f108e38410","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"eefa83b8-9bdd-4beb-94f3-95f108e38410","field":"data.y"}}],"marks":[{"type":"symbol","from":{"data":"eefa83b8-9bdd-4beb-94f3-95f108e38410"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"fill":{"value":"steelblue"},"fillOpacity":{"value":1}},"update":{"shape":"circle","size":{"value":70},"stroke":{"value":"transparent"}},"hover":{"size":{"value":210},"stroke":{"value":"white"}}}}],"data":[{"name":"eefa83b8-9bdd-4beb-94f3-95f108e38410","values":[{"x":291,"y":0.9900868535041809},{"x":50,"y":0.8436248898506165},{"x":523,"y":0.9938432574272156},{"x":90,"y":0.7332876324653625},{"x":162,"y":0.6341907382011414},{"x":28,"y":0.5229856371879578},{"x":941,"y":0.9932153224945068},{"x":3,"y":0.37502479553222656},{"x":2,"y":0},{"x":9,"y":0.3905417025089264},{"x":5,"y":0.3198257386684418},{"x":16,"y":0.4642397463321686}]}],"width":400,"height":247.2187957763672,"padding":{"bottom":40,"top":10,"right":10,"left":55}},"value":"#gorilla_repl.vega.VegaView{:content {:axes [{:titleOffset 30, :title \"Length of training sequence\", :scale \"x\", :type \"x\"} {:titleOffset 45, :title \"Fraction even in output\", :scale \"y\", :type \"y\"}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"eefa83b8-9bdd-4beb-94f3-95f108e38410\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"eefa83b8-9bdd-4beb-94f3-95f108e38410\", :field \"data.y\"}}], :marks [{:type \"symbol\", :from {:data \"eefa83b8-9bdd-4beb-94f3-95f108e38410\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 1}}, :update {:shape \"circle\", :size {:value 70}, :stroke {:value \"transparent\"}}, :hover {:size {:value 210}, :stroke {:value \"white\"}}}}], :data [{:name \"eefa83b8-9bdd-4beb-94f3-95f108e38410\", :values ({:x 291, :y 0.99008685} {:x 50, :y 0.8436249} {:x 523, :y 0.99384326} {:x 90, :y 0.73328763} {:x 162, :y 0.63419074} {:x 28, :y 0.52298564} {:x 941, :y 0.9932153} {:x 3, :y 0.3750248} {:x 2, :y 0} {:x 9, :y 0.3905417} {:x 5, :y 0.31982574} {:x 16, :y 0.46423975})}], :width 400, :height 247.2188, :padding {:bottom 40, :top 10, :right 10, :left 55}}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"0cc4edef-3b08-4116-bcf1-81b4446c1e39","values":[{"x":291,"y":0.9370829463005066},{"x":50,"y":0.46403491497039795},{"x":523,"y":0.9609787464141846},{"x":90,"y":0.9214794039726257},{"x":162,"y":0.9801725745201111},{"x":28,"y":0.3782656788825989},{"x":3,"y":0},{"x":2,"y":0},{"x":9,"y":0.41151484847068787},{"x":5,"y":0.3503285348415375},{"x":16,"y":0.4366169273853302}]}],"marks":[{"type":"symbol","from":{"data":"0cc4edef-3b08-4116-bcf1-81b4446c1e39"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"fill":{"value":"steelblue"},"fillOpacity":{"value":1}},"update":{"shape":"circle","size":{"value":70},"stroke":{"value":"transparent"}},"hover":{"size":{"value":210},"stroke":{"value":"white"}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"0cc4edef-3b08-4116-bcf1-81b4446c1e39","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"0cc4edef-3b08-4116-bcf1-81b4446c1e39","field":"data.y"}}],"axes":[{"type":"x","scale":"x","title":"Length of training sequence","titleOffset":30},{"type":"y","scale":"y","title":"Fraction even in output","titleOffset":45}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"0cc4edef-3b08-4116-bcf1-81b4446c1e39\", :values ({:x 291, :y 0.93708295} {:x 50, :y 0.46403491} {:x 523, :y 0.96097875} {:x 90, :y 0.9214794} {:x 162, :y 0.9801726} {:x 28, :y 0.37826568} {:x 3, :y 0} {:x 2, :y 0} {:x 9, :y 0.41151485} {:x 5, :y 0.35032853} {:x 16, :y 0.43661693})}], :marks [{:type \"symbol\", :from {:data \"0cc4edef-3b08-4116-bcf1-81b4446c1e39\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :fill {:value \"steelblue\"}, :fillOpacity {:value 1}}, :update {:shape \"circle\", :size {:value 70}, :stroke {:value \"transparent\"}}, :hover {:size {:value 210}, :stroke {:value \"white\"}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"0cc4edef-3b08-4116-bcf1-81b4446c1e39\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"0cc4edef-3b08-4116-bcf1-81b4446c1e39\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\", :title \"Length of training sequence\", :titleOffset 30} {:type \"y\", :scale \"y\", :title \"Fraction even in output\", :titleOffset 45}]}}"}
 ;; <=
+
+;; @@
+
+;; @@
