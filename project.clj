@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/data.csv "0.1.3"]
                  [clj-auto-diff "0.1.3"]
-                 [anglican "0.9.0"]]
+                 [anglican "0.10.0-PRERELEASE"]]
   :plugins [[lein-gorilla "0.3.6"]]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
