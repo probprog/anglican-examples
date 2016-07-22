@@ -51,7 +51,7 @@
   (observe* [this value] (observe* (flip pub-preference) (= value :pub))))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-unkown'>#multifn[print-method 0x6a9f7e46]</span>","value":"#multifn[print-method 0x6a9f7e46]"}
+;;; {"type":"html","content":"<span class='clj-unkown'>#multifn[print-method 0x3f2e98d]</span>","value":"#multifn[print-method 0x3f2e98d]"}
 ;; <=
 
 ;; **
@@ -62,7 +62,7 @@
 (repeatedly 10 #(sample* (location 0.6)))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"}],"value":"(:pub :starbucks :starbucks :pub :pub :pub :pub :starbucks :pub :starbucks)"}
+;;; {"type":"list-like","open":"<span class='clj-lazy-seq'>(</span>","close":"<span class='clj-lazy-seq'>)</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"}],"value":"(:pub :starbucks :pub :pub :starbucks :pub :starbucks :pub :starbucks :pub)"}
 ;; <=
 
 ;; **
@@ -80,15 +80,15 @@
        :meet (= amy-location bob-location)})))
 
 (println "p(Amy at pub) ="
-  (stat/mean (map #(if (= (:amy %) :pub) 1.0 0.0)
+  (mean (map #(if (= (:amy %) :pub) 1.0 0.0)
                 (repeatedly 1000 #(sample* ((conditional meet-by-chance)))))))
 
 (println "p(Both at same location) ="
-  (stat/mean (map #(if (:meet %) 1.0 0.0) 
+  (mean (map #(if (:meet %) 1.0 0.0) 
                 (repeatedly 1000 #(sample* ((conditional meet-by-chance)))))))
 ;; @@
 ;; ->
-;;; p(Amy at pub) = 0.592
+;;; p(Amy at pub) = 0.603
 ;;; p(Both at same location) = 0.525
 ;;; 
 ;; <-
@@ -122,7 +122,7 @@
 (frequencies (repeatedly 1000 #(sample* ((conditional meet-at-pub-inefficient)))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-long'>631</span>","value":"631"}],"value":"[:pub 631]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-long'>369</span>","value":"369"}],"value":"[:starbucks 369]"}],"value":"{:pub 631, :starbucks 369}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-long'>374</span>","value":"374"}],"value":"[:starbucks 374]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-long'>626</span>","value":"626"}],"value":"[:pub 626]"}],"value":"{:starbucks 374, :pub 626}"}
 ;; <=
 
 ;; **
@@ -144,7 +144,7 @@
 (frequencies (repeatedly 1000 #(sample* ((conditional meet-at-pub-efficient)))))
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-long'>310</span>","value":"310"}],"value":"[:starbucks 310]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-long'>690</span>","value":"690"}],"value":"[:pub 690]"}],"value":"{:starbucks 310, :pub 690}"}
+;;; {"type":"list-like","open":"<span class='clj-map'>{</span>","close":"<span class='clj-map'>}</span>","separator":", ","items":[{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:starbucks</span>","value":":starbucks"},{"type":"html","content":"<span class='clj-long'>338</span>","value":"338"}],"value":"[:starbucks 338]"},{"type":"list-like","open":"","close":"","separator":" ","items":[{"type":"html","content":"<span class='clj-keyword'>:pub</span>","value":":pub"},{"type":"html","content":"<span class='clj-long'>662</span>","value":"662"}],"value":"[:pub 662]"}],"value":"{:starbucks 338, :pub 662}"}
 ;; <=
 
 ;; **
@@ -232,10 +232,10 @@
 (coordinate depth)
 ;; @@
 ;; ->
-;;; (:pub :pub :pub :pub :pub)
+;;; (:pub :pub :pub :starbucks :starbucks)
 ;;; recursion depth:  0
-;;; p(Amy at pub):  0.695
-;;; p(Bob at pub):  0.618
+;;; p(Amy at pub):  0.706
+;;; p(Bob at pub):  0.577
 ;;; 
 ;; <-
 ;; =>
@@ -252,10 +252,10 @@
 (coordinate depth)
 ;; @@
 ;; ->
-;;; (:starbucks :starbucks :starbucks :starbucks :starbucks)
+;;; (:starbucks :pub :pub :pub :pub)
 ;;; recursion depth:  1
-;;; p(Amy at pub):  0.698
-;;; p(Bob at pub):  0.785
+;;; p(Amy at pub):  0.695
+;;; p(Bob at pub):  0.746
 ;;; 
 ;; <-
 ;; =>
@@ -275,14 +275,14 @@
 (coordinate depth)
 ;; @@
 ;; ->
-;;; (:pub :pub :pub :pub :pub)
+;;; (:starbucks :pub :pub :pub :pub)
 ;;; recursion depth:  2
-;;; p(Amy at pub):  0.826
-;;; p(Bob at pub):  0.863
-;;; (:pub :pub :pub :pub :pub)
+;;; p(Amy at pub):  0.848
+;;; p(Bob at pub):  0.87
+;;; (:pub :starbucks :pub :pub :pub)
 ;;; recursion depth:  3
-;;; p(Amy at pub):  0.929
-;;; p(Bob at pub):  0.965
+;;; p(Amy at pub):  0.92
+;;; p(Bob at pub):  0.914
 ;;; 
 ;; <-
 ;; =>
@@ -361,17 +361,17 @@
 ;; @@
 ;; ->
 ;;; recursion depth:  0
-;;; p(Amy at pub):  0.502
-;;; p(Bob at pub):  0.597
+;;; p(Amy at pub):  0.483
+;;; p(Bob at pub):  0.617
 ;;; recursion depth:  1
-;;; p(Amy at pub):  0.476
-;;; p(Bob at pub):  0.783
+;;; p(Amy at pub):  0.483
+;;; p(Bob at pub):  0.781
 ;;; recursion depth:  2
-;;; p(Amy at pub):  0.305
-;;; p(Bob at pub):  0.875
+;;; p(Amy at pub):  0.321
+;;; p(Bob at pub):  0.886
 ;;; recursion depth:  3
-;;; p(Amy at pub):  0.166
-;;; p(Bob at pub):  0.943
+;;; p(Amy at pub):  0.19
+;;; p(Bob at pub):  0.959
 ;;; 
 ;; <-
 ;; =>
