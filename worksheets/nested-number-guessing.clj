@@ -42,15 +42,25 @@
 ;; **
 
 ;; @@
+(defdist dirac
+  "Dirac distribution centered on x"
+  [x] []
+  (sample* [this] x)
+  (observe* [this value] 
+            (if (= x value) 
+              0.0  
+              (- (/ 1.0 0.0)))))
+
 (defm secondplayer [a] 
   (let [c (- 8 a)]
     (sample (uniform-discrete c 10))))
 
-(defquery firstplayer []
-  (let [a (sample (uniform-discrete 0 10))
-        b (secondplayer a)]
-    (observe (dirac (+ a b)) 13)
-    a))
+(with-primitive-procedures [dirac]
+  (defquery firstplayer []
+    (let [a (sample (uniform-discrete 0 10))
+          b (secondplayer a)]
+      (observe (dirac (+ a b)) 13)
+      a)))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;nested-number-guessing/firstplayer</span>","value":"#'nested-number-guessing/firstplayer"}
@@ -71,7 +81,7 @@
 
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"41c0c627-14b3-49ef-8f4e-5f65407f9799","values":[{"x":0,"y":0},{"x":1,"y":0},{"x":2,"y":0},{"x":3,"y":0},{"x":4,"y":0.21639744952177695},{"x":5,"y":0.1975637619553692},{"x":6,"y":0.16327311370882236},{"x":7,"y":0.15036397449521907},{"x":8,"y":0.14085547290116968},{"x":9,"y":0.13154622741764288}]}],"marks":[{"type":"rect","from":{"data":"41c0c627-14b3-49ef-8f4e-5f65407f9799"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"41c0c627-14b3-49ef-8f4e-5f65407f9799","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"41c0c627-14b3-49ef-8f4e-5f65407f9799","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"41c0c627-14b3-49ef-8f4e-5f65407f9799\", :values ({:x 0, :y 0} {:x 1, :y 0} {:x 2, :y 0} {:x 3, :y 0} {:x 4, :y 0.21639744952177695} {:x 5, :y 0.1975637619553692} {:x 6, :y 0.16327311370882236} {:x 7, :y 0.15036397449521907} {:x 8, :y 0.14085547290116968} {:x 9, :y 0.13154622741764288})}], :marks [{:type \"rect\", :from {:data \"41c0c627-14b3-49ef-8f4e-5f65407f9799\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"41c0c627-14b3-49ef-8f4e-5f65407f9799\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"41c0c627-14b3-49ef-8f4e-5f65407f9799\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"3486ad11-dbb5-4635-93da-8e827b95f85e","values":[{"x":0,"y":0},{"x":1,"y":0},{"x":2,"y":0},{"x":3,"y":0},{"x":4,"y":0.22799514301133786},{"x":5,"y":0.19478953049109693},{"x":6,"y":0.1693497031840248},{"x":7,"y":0.1490879654614133},{"x":8,"y":0.13749865083647828},{"x":9,"y":0.12127900701564866}]}],"marks":[{"type":"rect","from":{"data":"3486ad11-dbb5-4635-93da-8e827b95f85e"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"3486ad11-dbb5-4635-93da-8e827b95f85e","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"3486ad11-dbb5-4635-93da-8e827b95f85e","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"3486ad11-dbb5-4635-93da-8e827b95f85e\", :values ({:x 0, :y 0} {:x 1, :y 0} {:x 2, :y 0} {:x 3, :y 0} {:x 4, :y 0.22799514301133786} {:x 5, :y 0.19478953049109693} {:x 6, :y 0.1693497031840248} {:x 7, :y 0.1490879654614133} {:x 8, :y 0.13749865083647828} {:x 9, :y 0.12127900701564866})}], :marks [{:type \"rect\", :from {:data \"3486ad11-dbb5-4635-93da-8e827b95f85e\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"3486ad11-dbb5-4635-93da-8e827b95f85e\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"3486ad11-dbb5-4635-93da-8e827b95f85e\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
 
 ;; **
@@ -85,18 +95,19 @@
 ;; **
 
 ;; @@
-(defm secondplayeralt [a] 
-  (let [c (sample (uniform-discrete 0 10))
-        Z (- 10 (- 8 a))]
-    (observe (dirac (> (+ a c) 8)) true)
-    (observe (flip (/ 1. Z)) true)
-    c))
-        
-(defquery firstplayeralt []
-  (let [a (sample (uniform-discrete 0 10))
-        b (secondplayeralt a)]
-    (observe (dirac (+ a b)) 13)
-    a))
+(with-primitive-procedures [dirac]
+  (defm secondplayeralt [a] 
+    (let [c (sample (uniform-discrete 0 10))
+          Z (- 10 (- 8 a))]
+      (observe (dirac (> (+ a c) 8)) true)
+      (observe (flip (/ 1. Z)) true)
+      c))
+
+  (defquery firstplayeralt []
+    (let [a (sample (uniform-discrete 0 10))
+          b (secondplayeralt a)]
+      (observe (dirac (+ a b)) 13)
+      a)))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;nested-number-guessing/firstplayeralt</span>","value":"#'nested-number-guessing/firstplayeralt"}
@@ -112,5 +123,9 @@
      (#(plot/bar-chart (keys %) (vals %))))
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"f088694a-d9d4-48d7-aac2-d3fa1fb007eb","values":[{"x":0,"y":0.0},{"x":1,"y":0},{"x":2,"y":0.0},{"x":3,"y":0.0},{"x":4,"y":0.21373132422022853},{"x":5,"y":0.1929728577567388},{"x":6,"y":0.18311809738445908},{"x":7,"y":0.15492969342767676},{"x":8,"y":0.13571895437710707},{"x":9,"y":0.11952907283379022}]}],"marks":[{"type":"rect","from":{"data":"f088694a-d9d4-48d7-aac2-d3fa1fb007eb"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"f088694a-d9d4-48d7-aac2-d3fa1fb007eb","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"f088694a-d9d4-48d7-aac2-d3fa1fb007eb","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"f088694a-d9d4-48d7-aac2-d3fa1fb007eb\", :values ({:x 0, :y 0.0} {:x 1, :y 0} {:x 2, :y 0.0} {:x 3, :y 0.0} {:x 4, :y 0.21373132422022853} {:x 5, :y 0.1929728577567388} {:x 6, :y 0.18311809738445908} {:x 7, :y 0.15492969342767676} {:x 8, :y 0.13571895437710707} {:x 9, :y 0.11952907283379022})}], :marks [{:type \"rect\", :from {:data \"f088694a-d9d4-48d7-aac2-d3fa1fb007eb\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"f088694a-d9d4-48d7-aac2-d3fa1fb007eb\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"f088694a-d9d4-48d7-aac2-d3fa1fb007eb\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"48402c9d-1071-4927-b734-10e3ad512204","values":[{"x":0,"y":0},{"x":1,"y":0},{"x":2,"y":0},{"x":3,"y":0},{"x":4,"y":0.1969499008025757},{"x":5,"y":0.19663490261549885},{"x":6,"y":0.1696416603875062},{"x":7,"y":0.15072089012254256},{"x":8,"y":0.15531740678064834},{"x":9,"y":0.1307352392912285}]}],"marks":[{"type":"rect","from":{"data":"48402c9d-1071-4927-b734-10e3ad512204"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"48402c9d-1071-4927-b734-10e3ad512204","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"48402c9d-1071-4927-b734-10e3ad512204","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"48402c9d-1071-4927-b734-10e3ad512204\", :values ({:x 0, :y 0} {:x 1, :y 0} {:x 2, :y 0} {:x 3, :y 0} {:x 4, :y 0.1969499008025757} {:x 5, :y 0.19663490261549885} {:x 6, :y 0.1696416603875062} {:x 7, :y 0.15072089012254256} {:x 8, :y 0.15531740678064834} {:x 9, :y 0.1307352392912285})}], :marks [{:type \"rect\", :from {:data \"48402c9d-1071-4927-b734-10e3ad512204\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"48402c9d-1071-4927-b734-10e3ad512204\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"48402c9d-1071-4927-b734-10e3ad512204\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
+
+;; @@
+
+;; @@
