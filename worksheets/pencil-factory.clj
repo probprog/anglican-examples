@@ -71,11 +71,11 @@
 (plot/histogram samples)
 
 
-[(float (stat/mean samples))
- (float (stat/variance samples))]
+[(float (mean samples))
+ (float (variance samples))]
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33364207</span>","value":"0.33364207"},{"type":"html","content":"<span class='clj-unkown'>0.055894837</span>","value":"0.055894837"}],"value":"[0.33364207 0.055894837]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.33149165</span>","value":"0.33149165"},{"type":"html","content":"<span class='clj-unkown'>0.056539405</span>","value":"0.056539405"}],"value":"[0.33149165 0.056539405]"}
 ;; <=
 
 ;; **
@@ -162,8 +162,8 @@
 (plot/histogram samples)
 
 
-[(float (stat/mean samples))
- (float (stat/variance samples))]
+[(float (mean samples))
+ (float (variance samples))]
 
 [(float (exp-beta-pos a b n k ))
  (float (var-beta-pos a b n k))]
@@ -199,9 +199,9 @@
 (plot/histogram samples)
 
 
-[(float (stat/mean samples))
- (float (stat/variance samples))]
+[(float (mean samples))
+ (float (variance samples))]
 ;; @@
 ;; =>
-;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.29800865</span>","value":"0.29800865"},{"type":"html","content":"<span class='clj-unkown'>0.015674768</span>","value":"0.015674768"}],"value":"[0.29800865 0.015674768]"}
+;;; {"type":"list-like","open":"<span class='clj-vector'>[</span>","close":"<span class='clj-vector'>]</span>","separator":" ","items":[{"type":"html","content":"<span class='clj-unkown'>0.30122435</span>","value":"0.30122435"},{"type":"html","content":"<span class='clj-unkown'>0.015498705</span>","value":"0.015498705"}],"value":"[0.30122435 0.015498705]"}
 ;; <=
