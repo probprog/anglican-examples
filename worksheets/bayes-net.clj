@@ -73,7 +73,7 @@
      (#(plot/bar-chart (keys %) (vals %))))
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"a10e1001-ab7c-40a5-8024-1d41b75efcbf","values":[{"x":false,"y":0.6872478875996721},{"x":true,"y":0.31275211240032785}]}],"marks":[{"type":"rect","from":{"data":"a10e1001-ab7c-40a5-8024-1d41b75efcbf"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"a10e1001-ab7c-40a5-8024-1d41b75efcbf","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"a10e1001-ab7c-40a5-8024-1d41b75efcbf","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"a10e1001-ab7c-40a5-8024-1d41b75efcbf\", :values ({:x false, :y 0.6872478875996721} {:x true, :y 0.31275211240032785})}], :marks [{:type \"rect\", :from {:data \"a10e1001-ab7c-40a5-8024-1d41b75efcbf\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"a10e1001-ab7c-40a5-8024-1d41b75efcbf\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"a10e1001-ab7c-40a5-8024-1d41b75efcbf\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"1719c908-19b1-48db-9f12-59c9e50a168b","values":[{"x":false,"y":0.6657932200237532},{"x":true,"y":0.33420677997624676}]}],"marks":[{"type":"rect","from":{"data":"1719c908-19b1-48db-9f12-59c9e50a168b"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"1719c908-19b1-48db-9f12-59c9e50a168b","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"1719c908-19b1-48db-9f12-59c9e50a168b","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"1719c908-19b1-48db-9f12-59c9e50a168b\", :values ({:x false, :y 0.6657932200237532} {:x true, :y 0.33420677997624676})}], :marks [{:type \"rect\", :from {:data \"1719c908-19b1-48db-9f12-59c9e50a168b\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"1719c908-19b1-48db-9f12-59c9e50a168b\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"1719c908-19b1-48db-9f12-59c9e50a168b\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
 
 ;; **
@@ -85,34 +85,44 @@
 ;; **
 
 ;; @@
-(defquery bayes-net-rejection [] 
-  (let [is-cloudy (sample (flip 0.5))
+(defdist dirac
+  "Dirac distribution centered on x"
+  [x] []
+  (sample* [this] x)
+  (observe* [this value] 
+            (if (= x value) 
+              0.0  
+              (- (/ 1.0 0.0)))))
 
-        is-raining (cond (= is-cloudy true ) 
-                         (sample (flip 0.8))
-                         (= is-cloudy false) 
-                         (sample (flip 0.2)))
+(with-primitive-procedures [dirac]
+  (defquery bayes-net-rejection [] 
+    (let [is-cloudy (sample (flip 0.5))
 
-        sprinkler  (cond (= is-cloudy true ) 
-                         (sample (flip 0.1))
-                         (= is-cloudy false) 
-                         (sample (flip 0.5)))
+          is-raining (cond (= is-cloudy true ) 
+                           (sample (flip 0.8))
+                           (= is-cloudy false) 
+                           (sample (flip 0.2)))
 
-        wet-grass  (cond (and (= sprinkler true) 
-                              (= is-raining true))
-                         (sample (flip 0.99))
-                         (and (= sprinkler false) 
-                              (= is-raining false))
-                         (sample (flip 0.0))
-                         (or  (= sprinkler true) 
-                              (= is-raining true))
-                         (sample (flip 0.9)))]
+          sprinkler  (cond (= is-cloudy true ) 
+                           (sample (flip 0.1))
+                           (= is-cloudy false) 
+                           (sample (flip 0.5)))
 
-    (observe (dirac sprinkler) true)
-    (observe (dirac wet-grass) true)
+          wet-grass  (cond (and (= sprinkler true) 
+                                (= is-raining true))
+                           (sample (flip 0.99))
+                           (and (= sprinkler false) 
+                                (= is-raining false))
+                           (sample (flip 0.0))
+                           (or  (= sprinkler true) 
+                                (= is-raining true))
+                           (sample (flip 0.9)))]
+
+      (observe (dirac sprinkler) true)
+      (observe (dirac wet-grass) true)
 
 
-    is-raining))  
+      is-raining)))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-var'>#&#x27;bayes-net/bayes-net-rejection</span>","value":"#'bayes-net/bayes-net-rejection"}
@@ -121,12 +131,12 @@
 ;; @@
 (->> (doquery :smc bayes-net-rejection nil :number-of-particles 100)
      (take 10000)
-     (collect-by :result)
+     s/collect-results
      (s/empirical-distribution)
      (#(plot/bar-chart (keys %) (vals %))))
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"42745e75-fc67-4c64-be71-cdb1cb6448c8","values":[{"x":false,"y":0.6831834226410565},{"x":true,"y":0.3168165773589437}]}],"marks":[{"type":"rect","from":{"data":"42745e75-fc67-4c64-be71-cdb1cb6448c8"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"42745e75-fc67-4c64-be71-cdb1cb6448c8","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"42745e75-fc67-4c64-be71-cdb1cb6448c8","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"42745e75-fc67-4c64-be71-cdb1cb6448c8\", :values ({:x false, :y 0.6831834226410565} {:x true, :y 0.3168165773589437})}], :marks [{:type \"rect\", :from {:data \"42745e75-fc67-4c64-be71-cdb1cb6448c8\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"42745e75-fc67-4c64-be71-cdb1cb6448c8\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"42745e75-fc67-4c64-be71-cdb1cb6448c8\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"978d5603-27a6-48ac-8b57-af2144e2e0a3","values":[{"x":true,"y":0.3216880623788967},{"x":false,"y":0.6783119376211033}]}],"marks":[{"type":"rect","from":{"data":"978d5603-27a6-48ac-8b57-af2144e2e0a3"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"width":{"scale":"x","band":true,"offset":-1},"y":{"scale":"y","field":"data.y"},"y2":{"scale":"y","value":0}},"update":{"fill":{"value":"steelblue"},"opacity":{"value":1}},"hover":{"fill":{"value":"#FF29D2"}}}}],"scales":[{"name":"x","type":"ordinal","range":"width","domain":{"data":"978d5603-27a6-48ac-8b57-af2144e2e0a3","field":"data.x"}},{"name":"y","range":"height","nice":true,"domain":{"data":"978d5603-27a6-48ac-8b57-af2144e2e0a3","field":"data.y"}}],"axes":[{"type":"x","scale":"x"},{"type":"y","scale":"y"}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"978d5603-27a6-48ac-8b57-af2144e2e0a3\", :values ({:x true, :y 0.3216880623788967} {:x false, :y 0.6783119376211033})}], :marks [{:type \"rect\", :from {:data \"978d5603-27a6-48ac-8b57-af2144e2e0a3\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :width {:scale \"x\", :band true, :offset -1}, :y {:scale \"y\", :field \"data.y\"}, :y2 {:scale \"y\", :value 0}}, :update {:fill {:value \"steelblue\"}, :opacity {:value 1}}, :hover {:fill {:value \"#FF29D2\"}}}}], :scales [{:name \"x\", :type \"ordinal\", :range \"width\", :domain {:data \"978d5603-27a6-48ac-8b57-af2144e2e0a3\", :field \"data.x\"}} {:name \"y\", :range \"height\", :nice true, :domain {:data \"978d5603-27a6-48ac-8b57-af2144e2e0a3\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\"} {:type \"y\", :scale \"y\"}]}}"}
 ;; <=
 
 ;; **
