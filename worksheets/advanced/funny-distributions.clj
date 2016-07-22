@@ -16,15 +16,12 @@
         [anglib crp]
         [clojure.string :only (join split blank?)]))
 ;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
-;; <=
 
 ;; @@
 (def infinite-loop #(loop [] (recur)))
-(defn funny-dist [] (if (sample (flip 0.5))
+(defn funny-dist [] (if (sample* (flip 0.5))
                       1 
-                      (if (sample (flip 0.5))
+                      (if (sample* (flip 0.5))
                         (funny-dist)
                         (infinite-loop))))
 
@@ -32,12 +29,9 @@
   (defquery induced-dist (predict :x (funny-dist))))
          
 ;; @@
-;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;funnydistributions/induced-dist</span>","value":"#'funnydistributions/induced-dist"}
-;; <=
 
 ;; @@
-(take 4 (doquery :pcascade induced-dist nil :number-of-threads 100))
+(take 4 (doquery :importance induced-dist nil :number-of-threads 100))
 ;; @@
 
 ;; @@
