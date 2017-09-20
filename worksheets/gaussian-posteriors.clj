@@ -18,7 +18,7 @@
             [anglican.stat :as s])
   (:use clojure.repl
         [anglican 
-          core runtime emit 
+          core runtime emit smc
           [state :only [get-predicts get-log-weight set-log-weight]]
           [inference :only [collect-by equalize]]]))
 ;; @@
