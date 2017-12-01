@@ -5,7 +5,7 @@
 ;;; 
 ;;; This example shows how to implement an interventional operator (the 'do' operator from the causal literature, but the name was already taken in closure).
 ;;; 
-;;; Once we define a model, the _do_ operator models external interventions to the model. As we are writing the model, there are nothing that forbids us of writing the same model (queries) with the required intervention. The problem with that approach is that we end up duplicating the models’ logic. To solve this problem, we could implement the intervention as an operator, meaning, a function from the space of queries to the space of queries. 
+;;; Once we define a model, the _do_ operator represents external interventions to the model. As we are writing the model, there is nothing that forbids us of writing the same model (queries) with the required intervention. The problem with that approach is that we end up duplicating the model’s logic. To solve this problem, we could implement the intervention as an operator, i.e., a function from the space of queries to the space of queries. 
 ;;; 
 ;;; In this Worksheet we are going to use the famous _sprinkler_ example. 
 ;; **
@@ -28,7 +28,7 @@
 ;;; ## Components
 ;;; 
 ;;; The operator contains three main components:
-;;; 1. The actual macro that takes a query, the name of a variable and the value use for the intervention. This value could be any arbitrary function that used variables already defined in the scope of the intervention.
+;;; 1. The actual macro: takes a query, the name of a variable and the value to use for the intervention. This value could be any arbitrary function as long as uses variables previously defined in the scope of the intervention.
 ;;; 1. A helper method to analyse the query looking for bindings (_let_ staments).
 ;;; 1. A helper method to modify the bindings and apply the intervention.
 ;; **
@@ -75,9 +75,9 @@
 
 ;; **
 ;;; ## Sprinkler bayesian network.
-;;; This example is a very simple DAG that models the state of the weather (`is-cloudy`, `is-raning`), a sprinkler device (`sprinkler-dist`, `sprinkler`), and whether or not the grass is wet (`wet-grass-dist`). 
+;;; This example is a very simple DAG that models the state of the weather (`is-cloudy`, `is-raning`), a sprinkler device (`sprinkler-dist`, `sprinkler`), and whether the grass is wet (`wet-grass-dist`) or not. 
 ;;; 
-;;; For this example, we are conditioning on the fact that the grass is wet, and querying the probability of that is raining. 
+;;; For this example, we are conditioning on the fact that the grass is wet, and querying the probability of raining. 
 ;; **
 
 ;; @@
@@ -143,7 +143,8 @@
 ;; <=
 
 ;; **
-;;; And $$p(R|W, do(S=True)) = 0.586$$ as expected
+;;; And @@p(R|W, \text{do}(S=\text{True})) = 0.586@@
+;;; as expected
 ;; **
 
 ;; @@
@@ -159,7 +160,7 @@
 
 ;; **
 ;;; ##Conditioning on sprinkle
-;;; And we could modify the original query to _observe_ the sprinkler, which is equivalent to condition on the fact that the sprinkler is on. This will show the well known fact that the interventional distribution is not necessarily the same as the conditioned distribution.
+;;; Additionally we could modify the original query to _observe_ the sprinkler, which is equivalent to condition on the fact that the sprinkler is on. This will show us the well known fact that the interventional distribution is not necessarily the same as the conditioned distribution.
 ;; **
 
 ;; @@
@@ -207,7 +208,7 @@
 ;; **
 ;;; ## More complex interventions
 ;;; 
-;;; The power of macros in Clojure allows us to use more complex interventions. In particular, we could use any variable from the query meanwhile those variables were previously defined. 
+;;; The power of macros in Clojure allows us to use more complex interventions. In particular, we could use any variable from the query as long as those variables were previously defined. 
 ;;; 
 ;;; In the following example, the sprinkler will be a sample that depends on the state of the `is-cloudy` variable.
 ;; **
