@@ -29,7 +29,7 @@
 ;;; 
 ;;; The operator contains three main components:
 ;;; 1. The actual macro: takes a query, the name of a variable and the value to use for the intervention. This value could be any arbitrary function as long as uses variables previously defined in the scope of the intervention.
-;;; 1. A helper method to analyse the query looking for bindings (_let_ staments).
+;;; 1. A helper method to analyse the query looking for bindings (_let_ statements).
 ;;; 1. A helper method to modify the bindings and apply the intervention.
 ;; **
 
@@ -51,7 +51,7 @@
             1  (myself (nth code 1))
             (let [[stament bindings & other] code]
               (if (= stament 'let)
-              	;TODO: use the undocumented detruscture method: http://clojure.org/guides/destructuring
+              	;TODO: use the undocumented destructuring method: http://clojure.org/guides/destructuring
                 (let [new-bindings (parse-and-replace-let target-variable value bindings)
                        new-other (doall (for [element other] (myself element)))]
                    (cons stament (cons (vec new-bindings) new-other))) ;(cons new-bindings new-other)
@@ -74,8 +74,8 @@
 ;; @@
 
 ;; **
-;;; ## Sprinkler bayesian network.
-;;; This example is a very simple DAG that models the state of the weather (`is-cloudy`, `is-raning`), a sprinkler device (`sprinkler-dist`, `sprinkler`), and whether the grass is wet (`wet-grass-dist`) or not. 
+;;; ## Sprinkler Bayesian network.
+;;; This example is a very simple DAG that models the state of the weather (`is-cloudy`, `is-raining`), a sprinkler device (`sprinkler-dist`, `sprinkler`), and whether the grass is wet (`wet-grass-dist`) or not. 
 ;;; 
 ;;; For this example, we are conditioning on the fact that the grass is wet, and querying the probability of raining. 
 ;; **
@@ -218,7 +218,7 @@
 ;; @@
 
 ;; @@
-(meta intervened-complex) :source
+((meta intervened-complex) :source)
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-keyword'>:source</span>","value":":source"}
