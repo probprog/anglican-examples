@@ -20,8 +20,7 @@
             [anglican importance smc lmh]
             [anglican.stat :as stat])
   (:use [anglican core emit runtime
-         [inference :refer [infer equalize]]
-         [state :refer [get-predicts]]]))
+         [inference :refer [infer equalize]]]))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}

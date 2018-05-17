@@ -5,7 +5,7 @@
 ;; **
 
 ;; **
-;;; (required namespace declarations only)
+;;; (recommended namespace declarations only)
 ;; **
 
 ;; @@
@@ -22,9 +22,12 @@
              :refer [equalize collect-by log-marginal]]
             [anglican.stat
              :refer [empirical-distribution empirical-expectation 
-                     empirical-mean empirical-variance empirical-std empirical-skew empirical-kurtosis
-                     sum mean variance std skew kurtosis l2-norm]]))
+                     empirical-mean empirical-variance empirical-std empirical-skew empirical-kurtosis]]))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
 ;; <=
+
+;; @@
+
+;; @@

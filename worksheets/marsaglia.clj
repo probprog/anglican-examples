@@ -3,14 +3,14 @@
 ;; **
 ;;; # Marsaglia
 ;;; 
-;;; In probabilistic programming systems like Anglican that support _continuous_ variables, recursion, and branching on nondeterminism it is possible to write procedures in the language itself that sample from distributions with uncountable support.  Another way of saying this is that we can denote constructive definitions of distribution over uncountable support and sample from the same.
+;;; In probabilistic programming systems like Anglican that support _continuous_ variables, recursion, and branching on nondeterminism, it is possible to write procedures in the language itself that sample from distributions with uncountable support.  Another way of saying this is that we can denote constructive definitions of distribution over uncountable support and sample from the same.
 ;; **
 
 ;; @@
 (ns marsaglia
   (:require [gorilla-plot.core :as plot])
   (:use clojure.repl
-        [anglican core runtime emit [state :only [get-predicts]]]))
+        [anglican core runtime emit]))
 ;; @@
 ;; =>
 ;;; {"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"}
@@ -91,9 +91,9 @@
 ;; <=
 
 ;; **
-;;; This can now be included in any Anglican program and used as a distribution, to be observed, etc.
+;;; This can now be included in any Anglican program and used as a distribution - that is, it can be sampled from and observed upon.
 ;;; 
-;;; Alternatively we can also include the sampling procedure directly by defm'ing it which produces a CPS version.
+;;; Alternatively, we can also include the sampling procedure directly by defm'ing it, which produces a CPS version that can be used directly within Anglican.
 ;; **
 
 ;; @@
@@ -177,7 +177,7 @@
 ;; <=
 
 ;; **
-;;; Which both result in query results near the analytical posterior of $$\mathrm{Normal}(7.25,.913^2)$$
+;;; Both of these diffferent queries generate empirical results close to the analytical posterior of $$\mathrm{Normal}(7.25,.913^2)$$
 ;; **
 
 ;; @@
