@@ -14,10 +14,7 @@
             :reload)
   (:use clojure.repl
         [anglican 
-          core 
-          runtime 
-          emit 
-          [state :only [get-predicts get-log-weight]]
+          core runtime emit 
           [inference :only [collect-by]]]))
 
 (defn index->ind 
@@ -32,11 +29,11 @@
   (m/mul x x))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/square</span>","value":"#'hmm-aistats/square"}
+;;; {"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"html","content":"<span class='clj-nil'>nil</span>","value":"nil"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/index-&gt;ind</span>","value":"#'hmm-aistats/index->ind"}],"value":"[nil,#'hmm-aistats/index->ind]"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/square</span>","value":"#'hmm-aistats/square"}],"value":"[[nil,#'hmm-aistats/index->ind],#'hmm-aistats/square]"}
 ;; <=
 
 ;; **
-;;; Define model
+;;; Define model:
 ;; **
 
 ;; @@
@@ -61,7 +58,7 @@
 ;; <=
 
 ;; **
-;;; Define data and parameters
+;;; Define data and parameters:
 ;; **
 
 ;; @@
@@ -112,11 +109,11 @@
    [ 0.2545 0.0611 0.6844]])
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/posterior</span>","value":"#'hmm-aistats/posterior"}
+;;; {"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/data</span>","value":"#'hmm-aistats/data"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/init-dist</span>","value":"#'hmm-aistats/init-dist"}],"value":"[#'hmm-aistats/data,#'hmm-aistats/init-dist]"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/trans-dists</span>","value":"#'hmm-aistats/trans-dists"}],"value":"[[#'hmm-aistats/data,#'hmm-aistats/init-dist],#'hmm-aistats/trans-dists]"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/obs-dists</span>","value":"#'hmm-aistats/obs-dists"}],"value":"[[[#'hmm-aistats/data,#'hmm-aistats/init-dist],#'hmm-aistats/trans-dists],#'hmm-aistats/obs-dists]"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/posterior</span>","value":"#'hmm-aistats/posterior"}],"value":"[[[[#'hmm-aistats/data,#'hmm-aistats/init-dist],#'hmm-aistats/trans-dists],#'hmm-aistats/obs-dists],#'hmm-aistats/posterior]"}
 ;; <=
 
 ;; **
-;;; Run inference
+;;; Run inference:
 ;; **
 
 ;; @@
@@ -135,15 +132,15 @@
        time))
 ;; @@
 ;; ->
-;;; &quot;Elapsed time: 2007.484 msecs&quot;
+;;; &quot;Elapsed time: 2507.608898 msecs&quot;
 ;;; 
 ;; <-
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/samples</span>","value":"#'hmm-aistats/samples"}
+;;; {"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/number-of-particles</span>","value":"#'hmm-aistats/number-of-particles"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/number-of-samples</span>","value":"#'hmm-aistats/number-of-samples"}],"value":"[#'hmm-aistats/number-of-particles,#'hmm-aistats/number-of-samples]"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/samples</span>","value":"#'hmm-aistats/samples"}],"value":"[[#'hmm-aistats/number-of-particles,#'hmm-aistats/number-of-samples],#'hmm-aistats/samples]"}
 ;; <=
 
 ;; **
-;;; Calculate L2 error relative to true posterior as a function of number of samples
+;;; Calculate L2 error relative to true posterior as a function of number of samples:
 ;; **
 
 ;; @@
@@ -160,7 +157,7 @@
         num-sample-range))
 ;; @@
 ;; =>
-;;; {"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/L2-errors</span>","value":"#'hmm-aistats/L2-errors"}
+;;; {"type":"list-like","open":"","close":"","separator":"</pre><pre>","items":[{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/num-sample-range</span>","value":"#'hmm-aistats/num-sample-range"},{"type":"html","content":"<span class='clj-var'>#&#x27;hmm-aistats/L2-errors</span>","value":"#'hmm-aistats/L2-errors"}],"value":"[#'hmm-aistats/num-sample-range,#'hmm-aistats/L2-errors]"}
 ;; <=
 
 ;; @@
@@ -173,5 +170,9 @@
                 :y-title "log L2 error")
 ;; @@
 ;; =>
-;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe","values":[{"x":2.0,"y":-0.18983647038932838},{"x":2.301029995663981,"y":-0.4210682382785468},{"x":2.6989700043360183,"y":-0.7336935198164446},{"x":2.9999999999999996,"y":-1.1277715062955393},{"x":3.301029995663981,"y":-1.493761115392502},{"x":3.6989700043360187,"y":-1.9005916071964988},{"x":4.0,"y":-2.2226489514007204}]}],"marks":[{"type":"line","from":{"data":"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe","field":"data.y"}}],"axes":[{"type":"x","scale":"x","title":"log number of samples","titleOffset":30},{"type":"y","scale":"y","title":"log L2 error","titleOffset":45}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe\", :values ({:x 2.0, :y -0.18983647038932838} {:x 2.301029995663981, :y -0.4210682382785468} {:x 2.6989700043360183, :y -0.7336935198164446} {:x 2.9999999999999996, :y -1.1277715062955393} {:x 3.301029995663981, :y -1.493761115392502} {:x 3.6989700043360187, :y -1.9005916071964988} {:x 4.0, :y -2.2226489514007204})}], :marks [{:type \"line\", :from {:data \"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"ea6fd442-cbf6-44c6-b3e6-841eaa6d0ebe\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\", :title \"log number of samples\", :titleOffset 30} {:type \"y\", :scale \"y\", :title \"log L2 error\", :titleOffset 45}]}}"}
+;;; {"type":"vega","content":{"width":400,"height":247.2187957763672,"padding":{"top":10,"left":55,"bottom":40,"right":10},"data":[{"name":"9605323b-47c9-488e-8a20-ec5fffc770a1","values":[{"x":2.0,"y":-0.4476416302959991},{"x":2.301029995663981,"y":-0.9133007335600992},{"x":2.6989700043360183,"y":-1.2901282966148748},{"x":2.9999999999999996,"y":-1.4629117636919273},{"x":3.301029995663981,"y":-1.6482575201031853},{"x":3.6989700043360187,"y":-1.8192096280776948},{"x":4.0,"y":-2.113367095515273}]}],"marks":[{"type":"line","from":{"data":"9605323b-47c9-488e-8a20-ec5fffc770a1"},"properties":{"enter":{"x":{"scale":"x","field":"data.x"},"y":{"scale":"y","field":"data.y"},"stroke":{"value":"#05A"},"strokeWidth":{"value":2},"strokeOpacity":{"value":1}}}}],"scales":[{"name":"x","type":"linear","range":"width","zero":false,"domain":{"data":"9605323b-47c9-488e-8a20-ec5fffc770a1","field":"data.x"}},{"name":"y","type":"linear","range":"height","nice":true,"zero":false,"domain":{"data":"9605323b-47c9-488e-8a20-ec5fffc770a1","field":"data.y"}}],"axes":[{"type":"x","scale":"x","title":"log number of samples","titleOffset":30},{"type":"y","scale":"y","title":"log L2 error","titleOffset":45}]},"value":"#gorilla_repl.vega.VegaView{:content {:width 400, :height 247.2188, :padding {:top 10, :left 55, :bottom 40, :right 10}, :data [{:name \"9605323b-47c9-488e-8a20-ec5fffc770a1\", :values ({:x 2.0, :y -0.4476416302959991} {:x 2.301029995663981, :y -0.9133007335600992} {:x 2.6989700043360183, :y -1.2901282966148748} {:x 2.9999999999999996, :y -1.4629117636919273} {:x 3.301029995663981, :y -1.6482575201031853} {:x 3.6989700043360187, :y -1.8192096280776948} {:x 4.0, :y -2.113367095515273})}], :marks [{:type \"line\", :from {:data \"9605323b-47c9-488e-8a20-ec5fffc770a1\"}, :properties {:enter {:x {:scale \"x\", :field \"data.x\"}, :y {:scale \"y\", :field \"data.y\"}, :stroke {:value \"#05A\"}, :strokeWidth {:value 2}, :strokeOpacity {:value 1}}}}], :scales [{:name \"x\", :type \"linear\", :range \"width\", :zero false, :domain {:data \"9605323b-47c9-488e-8a20-ec5fffc770a1\", :field \"data.x\"}} {:name \"y\", :type \"linear\", :range \"height\", :nice true, :zero false, :domain {:data \"9605323b-47c9-488e-8a20-ec5fffc770a1\", :field \"data.y\"}}], :axes [{:type \"x\", :scale \"x\", :title \"log number of samples\", :titleOffset 30} {:type \"y\", :scale \"y\", :title \"log L2 error\", :titleOffset 45}]}}"}
 ;; <=
+
+;; @@
+
+;; @@
