@@ -6,7 +6,7 @@
 
 ;; @@
 (ns linear-regression
-  (:require [plotting :as plot]
+  (:require [gorilla-plot.core :as plot]
             [clojure.core.matrix :as mat])
   (:use clojure.repl
         clojure.pprint
